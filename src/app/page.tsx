@@ -1,25 +1,4 @@
 'use client';
-import {wrapWithErrorBoundary} from './error-boundary/withErrorBoundary'
-
-
-
-// const Home = () => {
-
-//   // const throwError = () => {
-//   //   throw new Error('This is a test error!');
-//   // };
-
-//   return (
-//     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-//       <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-//         <h2>Click the button to trigger an error:</h2>
-//         <button onClick={throwError}>Trigger Error</button>
-//       </main>
-//     </div>
-//   );
-// }
-
-// export default wrapWithErrorBoundary(Home);
 
 import React, { useState } from 'react';
 
@@ -44,6 +23,6 @@ const Home = () => {
   );
 };
 
-export default wrapWithErrorBoundary(Home);
+export default Home;
 
 

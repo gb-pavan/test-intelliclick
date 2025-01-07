@@ -1,6 +1,5 @@
 import { withErrorBoundary } from 'react-error-boundary';
 import ErrorBoundaryFallback from './ErrorBoundaryFallback';
-// import ErrorBoundaryFallback from './ErrorBoundaryFallback';
 
 export const wrapWithErrorBoundary = (Component: React.ComponentType<{ children: React.ReactNode }>) => {
   return withErrorBoundary(Component, {

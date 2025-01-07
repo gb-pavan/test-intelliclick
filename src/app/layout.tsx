@@ -22,46 +22,17 @@ export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
-}>) {
-  
-  // const LayoutWithError = LayoutWithErrorBoundary(() => <>{children}</>);
+}>) {  
 
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {/* {children} */}
         <LayoutWithErrorBoundary>{children}</LayoutWithErrorBoundary>
 
       </body>
     </html>
   );
 }
-
-
-// // app/error-boundary/withErrorBoundary.tsx
-// import { withErrorBoundary } from 'react-error-boundary';
-// // import ErrorBoundaryFallback from './ErrorBoundaryFallback';
-
-// export const wrapWithErrorBoundary = (Component: React.ComponentType) => {
-//   return withErrorBoundary(Component, {
-//     FallbackComponent: ErrorBoundaryFallback,
-//     onError(error, info) {
-//       console.error('Caught an error:', error);
-//       console.error('Error details:', info);
-//     },
-//   });
-// };
-
-// app/error-boundary/ErrorBoundaryFallback.tsx
-// const ErrorBoundaryFallback = () => (
-//   <div style={{ textAlign: 'center', padding: '20px' }}>
-//     <h1>Something went wrong!</h1>
-//     <p>Please try again later.</p>
-//     <button onClick={() => window.location.reload()}>Reload</button>
-//   </div>
-// );
-
-// // export default ErrorBoundaryFallback;
 
