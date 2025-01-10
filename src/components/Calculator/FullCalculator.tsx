@@ -43,6 +43,8 @@ const FullCalculator: React.FC = () => {
     setInput(input + '*');
   } else if (value === '÷'){
     setInput(input + '/');
+  } else if (value === '√'){
+    setInput(input + 'sqrt(');
   }
   
   else {

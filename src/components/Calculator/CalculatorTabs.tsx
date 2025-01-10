@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import FullCalculator from './FullCalculator';
+import PeriodicTable from './PeriodicTable';
 
 const CalculatorTabs: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string>('Basic');
@@ -13,7 +14,7 @@ const CalculatorTabs: React.FC = () => {
     { label: 'π√∇', content: 'Pi, Roots & Operators' },
     { label: 'Σ∫∏', content: 'Summation, Integral, Product' },
     { label: '()', content: 'Grouping and Parentheses' },
-    { label: 'H₂O', content: 'Chemistry Symbols' },
+    { label: 'H₂O', content: <PeriodicTable /> },
     { label: 'Calculator', content: <FullCalculator /> },
   ];
 
