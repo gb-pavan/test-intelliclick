@@ -7,23 +7,49 @@ const FullCalculator: React.FC = () => {
   const [input, setInput] = useState<string>('');
   const [isRadians, setIsRadians] = useState<boolean>(true);
 
+  // const handleButtonClick = (value: string) => {
+  //   if (value === '=') {
+  //     try {
+  //       // Evaluate the mathematical expression
+  //       const evaluation = math.evaluate(input);
+  //       setInput(evaluation.toString());
+  //     } catch (error) {
+  //       setInput('Error');
+  //     }
+  //   } else if (value === 'clear') {
+  //     setInput('');
+  //   } else if (value === 'Radians' || value === 'Degrees') {
+  //     setIsRadians(value === 'Radians');
+  //   } else {
+  //     setInput(input + value);
+  //   }
+  // };
+
   const handleButtonClick = (value: string) => {
-    if (value === '=') {
-      try {
-        // Evaluate the mathematical expression
-        const evaluation = math.evaluate(input);
-        setInput(evaluation.toString());
-      } catch (error) {
-        setInput('Error');
-      }
-    } else if (value === 'clear') {
-      setInput('');
-    } else if (value === 'Radians' || value === 'Degrees') {
-      setIsRadians(value === 'Radians');
-    } else {
-      setInput(input + value);
+  if (value === '=') {
+    try {
+      const evaluation = math.evaluate(input);
+      setInput(evaluation.toString());
+    } catch (error) {
+      setInput('Error');
     }
-  };
+  } else if (value === 'clear') {
+    setInput('');
+  } else if (value === 'Radians' || value === 'Degrees') {
+    setIsRadians(value === 'Radians');
+  } else if (value === 'x^') {
+    setInput(input + '^'); // Replace 'x^' with '^'
+  } else if (value === '×'){
+    setInput(input + '*');
+  } else if (value === '÷'){
+    setInput(input + '/');
+  }
+  
+  else {
+    setInput(input + value);
+  }
+};
+
 
   return (
     <div className="flex flex-col items-center w-full max-w-xl p-4 mx-auto bg-white shadow-md rounded-md">
@@ -98,7 +124,7 @@ const FullCalculator: React.FC = () => {
         ))}
 
         {/* Fourth Row */}
-        {['π', 'e', 'x^_', '0', '.', '=', '+'].map((key) => (
+        {['π', 'e', 'x^', '0', '.', '=', '+'].map((key) => (
           <button
             key={key}
             onClick={() => handleButtonClick(key)}
