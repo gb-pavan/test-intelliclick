@@ -2,25 +2,31 @@ import React, { useState } from 'react';
 import { evaluate } from 'mathjs';
 
 const operations = [
-  { label: '□²', value: '^2' },
-  { label: 'x^□', value: '^' },
-  { label: '√□', value: 'sqrt(' },
-  { label: '∛□', value: 'cbrt(' },
-  { label: '□□', value: '**' },
-  { label: 'log□', value: 'log(' },
-  { label: 'π', value: 'pi' },
-  { label: 'θ', value: 'theta' },
-  { label: '∞', value: 'Infinity' },
   { label: '∫', value: 'integral(' },
+  { label: '∬', value: 'doubleIntegral(' },
+  { label: '∭', value: 'tripleIntegral(' },
+  { label: '∫□□', value: 'definiteIntegral(lower, upper, ' },
+  { label: '∬□□', value: 'doubleDefiniteIntegral(lower1, upper1, lower2, upper2, ' },
+  { label: '∭□□', value: 'tripleDefiniteIntegral(lower1, upper1, lower2, upper2, lower3, upper3, ' },
+  { label: 'Σ', value: 'sum(' },
+  { label: 'Π', value: 'product(' },
+  { label: 'lim', value: 'limit(' },
+  { label: 'lim→∞', value: 'limitToInfinity(' },
+  { label: 'lim x→0-', value: 'limit(x, 0, -)' },
+  { label: 'lim x→0+', value: 'limit(x, 0, +)' },
   { label: 'd/dx', value: 'derivative(' },
+  { label: 'd²/dx²', value: 'secondDerivative(' },
+  { label: '□\'', value: '(□)\'' },
+  { label: '□\'\'', value: '(□)\'\'' },
+  { label: '∂/∂x', value: 'partialDerivative(' },
+  
+//   { label: '□²', value: '^2' },
+  
+//   { label: '√□', value: 'sqrt(' },
+//   { label: '∛□', value: 'cbrt(' },
 ];
 
-const matrices = [
-  '(2×2)', '(2×3)', '(3×3)', '(3×2)', '(4×2)', '(4×3)','(4×4)', '(3×4)',
-  '(2×4)', '(5×5)', '()', '(1×2)', '(1×3)', '(1×4)', '(1×5)','(1×6)','(2×1)','(3×1)','(4×1)','(5×1)','(6×1)','(7×1)',
-];
-
-const Matrix: React.FC = () => {
+const IntegrationAndDerivatives: React.FC = () => {
   const [input, setInput] = useState<string>('');
   const [result, setResult] = useState<string>('');
 
@@ -30,7 +36,7 @@ const Matrix: React.FC = () => {
 
   const handleEvaluate = () => {
     try {
-      const evalResult = evaluate(input);
+      const evalResult = evaluate(input); // Customize evaluation for advanced operations
       setResult(evalResult.toString());
     } catch {
       setResult('Error');
@@ -44,7 +50,6 @@ const Matrix: React.FC = () => {
 
   return (
     <div className="bg-white shadow-md rounded-md w-full mx-auto">
-
       {/* <div className="mb-4">
         <input
           type="text"
@@ -54,22 +59,22 @@ const Matrix: React.FC = () => {
           placeholder="Enter expression"
         />
         <p className="mt-2 text-green-600 font-semibold">Result: {result}</p>
-      </div> */}
+      </div>
 
-      {/* <h3 className="text-lg font-medium mb-2">Matrices</h3> */}
-      <div className="grid grid-cols-11 gap-2">
-        {matrices.map((matrix) => (
+      <h3 className="text-lg font-medium mb-2">Integrals, Derivatives, and Calculus</h3> */}
+      <div className="grid grid-cols-8 gap-2">
+        {operations.map((operation) => (
           <button
-            key={matrix}
-            onClick={() => handleClick(matrix)}
+            key={operation.label}
+            onClick={() => handleClick(operation.value)}
             className="p-2 bg-blue-100 hover:bg-blue-200 rounded-md text-sm"
           >
-            {matrix}
+            {operation.label}
           </button>
         ))}
       </div>
 
-      <div className="mt-4 flex gap-2">
+      {/* <div className="mt-4 flex gap-2">
         <button
           onClick={handleEvaluate}
           className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-md"
@@ -82,9 +87,10 @@ const Matrix: React.FC = () => {
         >
           Clear
         </button>
-      </div>
+      </div> */}
     </div>
   );
 };
 
-export default Matrix;
+export default IntegrationAndDerivatives;
+

@@ -2,25 +2,31 @@ import React, { useState } from 'react';
 import { evaluate } from 'mathjs';
 
 const operations = [
-  { label: '□²', value: '^2' },
-  { label: 'x^□', value: '^' },
-  { label: '√□', value: 'sqrt(' },
-  { label: '∛□', value: 'cbrt(' },
-  { label: '□□', value: '**' },
-  { label: 'log□', value: 'log(' },
-  { label: 'π', value: 'pi' },
-  { label: 'θ', value: 'theta' },
-  { label: '∞', value: 'Infinity' },
-  { label: '∫', value: 'integral(' },
-  { label: 'd/dx', value: 'derivative(' },
+  { label: 'sin', value: 'sin(' },
+  { label: 'cos', value: 'cos(' },
+  { label: 'tan', value: 'tan(' },
+  { label: 'cot', value: 'cot(' },
+  { label: 'sec', value: 'sec(' },
+  { label: 'csc', value: 'csc(' },
+  { label: 'sinh', value: 'sinh(' },
+  { label: 'cosh', value: 'cosh(' },
+  { label: 'tanh', value: 'tanh(' },
+  { label: 'coth', value: 'coth(' },
+  { label: 'sech', value: 'sech(' },
+  { label: 'arcsin', value: 'arcsin(' },
+  { label: 'arccos', value: 'arccos(' },
+  { label: 'arctan', value: 'arctan(' },
+  { label: 'arccot', value: 'arccot(' },
+  { label: 'arcsec', value: 'arcsec(' },
+  { label: 'arccsc', value: 'arccsc(' },
+  { label: 'arcsinh', value: 'arcsinh(' },
+  { label: 'arccosh', value: 'arccosh(' },
+  { label: 'arctanh', value: 'arctanh(' },
+  { label: 'arccoth', value: 'arccoth(' },
+  { label: 'arcsech', value: 'arcsech(' },
 ];
 
-const matrices = [
-  '(2×2)', '(2×3)', '(3×3)', '(3×2)', '(4×2)', '(4×3)','(4×4)', '(3×4)',
-  '(2×4)', '(5×5)', '()', '(1×2)', '(1×3)', '(1×4)', '(1×5)','(1×6)','(2×1)','(3×1)','(4×1)','(5×1)','(6×1)','(7×1)',
-];
-
-const Matrix: React.FC = () => {
+const TrigonometricFunctions: React.FC = () => {
   const [input, setInput] = useState<string>('');
   const [result, setResult] = useState<string>('');
 
@@ -30,7 +36,7 @@ const Matrix: React.FC = () => {
 
   const handleEvaluate = () => {
     try {
-      const evalResult = evaluate(input);
+      const evalResult = evaluate(input); // Trigonometric and hyperbolic functions supported by mathjs
       setResult(evalResult.toString());
     } catch {
       setResult('Error');
@@ -44,7 +50,6 @@ const Matrix: React.FC = () => {
 
   return (
     <div className="bg-white shadow-md rounded-md w-full mx-auto">
-
       {/* <div className="mb-4">
         <input
           type="text"
@@ -54,22 +59,22 @@ const Matrix: React.FC = () => {
           placeholder="Enter expression"
         />
         <p className="mt-2 text-green-600 font-semibold">Result: {result}</p>
-      </div> */}
+      </div>
 
-      {/* <h3 className="text-lg font-medium mb-2">Matrices</h3> */}
+      <h3 className="text-lg font-medium mb-2">Trigonometric and Hyperbolic Functions</h3> */}
       <div className="grid grid-cols-11 gap-2">
-        {matrices.map((matrix) => (
+        {operations.map((operation) => (
           <button
-            key={matrix}
-            onClick={() => handleClick(matrix)}
+            key={operation.label}
+            onClick={() => handleClick(operation.value)}
             className="p-2 bg-blue-100 hover:bg-blue-200 rounded-md text-sm"
           >
-            {matrix}
+            {operation.label}
           </button>
         ))}
       </div>
 
-      <div className="mt-4 flex gap-2">
+      {/* <div className="mt-4 flex gap-2">
         <button
           onClick={handleEvaluate}
           className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-md"
@@ -82,9 +87,9 @@ const Matrix: React.FC = () => {
         >
           Clear
         </button>
-      </div>
+      </div> */}
     </div>
   );
 };
 
-export default Matrix;
+export default TrigonometricFunctions;

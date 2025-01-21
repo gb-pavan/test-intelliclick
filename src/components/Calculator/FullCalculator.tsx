@@ -38,13 +38,29 @@ const FullCalculator: React.FC = () => {
   } else if (value === 'Radians' || value === 'Degrees') {
     setIsRadians(value === 'Radians');
   } else if (value === 'x^') {
-    setInput(input + '^'); // Replace 'x^' with '^'
+    setInput(input + '^');
   } else if (value === '×'){
     setInput(input + '*');
   } else if (value === '÷'){
     setInput(input + '/');
   } else if (value === '√'){
     setInput(input + 'sqrt(');
+  }else if (value === 'arcsin') {
+    try {
+      const inputValue = parseFloat(input);
+      if (isNaN(inputValue)) {
+        setInput('Error: Invalid Input');
+      } else if (inputValue < -1 || inputValue > 1) {
+        setInput('Error: Input Out of Range');
+      } else {
+        const result = isRadians
+          ? math.asin(inputValue)
+          : math.asin(inputValue) * (180 / Math.PI);
+        setInput(result.toString());
+      }
+    } catch (error) {
+      setInput('Error');
+    }
   }
   
   else {
@@ -97,7 +113,10 @@ const FullCalculator: React.FC = () => {
           <button
             key={key}
             onClick={() => handleButtonClick(key)}
-            className="p-2 text-sm font-semibold bg-gray-200 rounded-md hover:bg-gray-300"
+            // className="p-2 text-sm font-semibold bg-gray-200 rounded-md hover:bg-gray-300"
+            className={`p-2 rounded-md ${
+      isRadians ? 'bg-teal-500 text-white' : 'bg-gray-200 text-black hover:bg-gray-300'
+    }`}
           >
             {key}
           </button>
