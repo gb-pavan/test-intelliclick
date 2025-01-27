@@ -22,6 +22,7 @@ const FullCalculator: React.FC = () => {
       setInput('Error');
     }
   } else if (value === 'clear') {
+    setIsLogMode(false)
     setInput('');
   } else if (value === 'Radians' || value === 'Degrees') {
     setIsRadians(value === 'Radians');
@@ -35,24 +36,42 @@ const FullCalculator: React.FC = () => {
     setInput(input + 'sqrt(');
   }else if (value === 'log') {
       setIsLogMode(true);
-    }else if (value === 'arcsin') {
-
-    try {
-      const inputValue = parseFloat(input);
-      if (isNaN(inputValue)) {
-        setInput('Error: Invalid Input');
-      } else if (inputValue < -1 || inputValue > 1) {
+    }else if (['arcsin', 'arccos', 'arctan'].includes(value)) {
+  try {
+    const inputValue = parseFloat(input);
+    if (isNaN(inputValue)) {
+      setInput('Error: Invalid Input');
+    } else {
+      // Check input range for arcsin and arccos
+      if ((value === 'arcsin' || value === 'arccos') && (inputValue < -1 || inputValue > 1)) {
         setInput('Error: Input Out of Range');
-      } else {
-        const result = isRadians
-          ? math.asin(inputValue)
-          : (math.asin(inputValue) as number) * (180 / Math.PI);
-        setInput(result.toString());
+        return;
       }
-    } catch (error) {
-      setInput('Error');
+
+      // Perform calculations based on the selected function
+      const result = (() => {
+        if (value === 'arcsin') {
+          return isRadians
+            ? math.asin(inputValue)
+            : (math.asin(inputValue) as number) * (180 / Math.PI);
+        } else if (value === 'arccos') {
+          return isRadians
+            ? math.acos(inputValue)
+            : (math.acos(inputValue) as number) * (180 / Math.PI);
+        } else if (value === 'arctan') {
+          return isRadians
+            ? math.atan(inputValue)
+            : (math.atan(inputValue) as number) * (180 / Math.PI);
+        }
+      })();
+
+      setInput(result!.toString());
     }
+  } catch (error) {
+    setInput('Error');
   }
+}
+
   
   else {
     setInput(input + value);
@@ -92,6 +111,7 @@ const handleLogCalculate = () => {
               <input
                 type="text"
                 value={logBase}
+                autoFocus
                 onChange={(e) => setLogBase(e.target.value)}
                 className="absolute top-1 left-0 w-4 p-1 text-xs text-center border-b border-gray-400 focus:outline-none"
                 style={{ fontSize: '0.8em', transform: 'translateY(4px)', backgroundColor:'#d9dbde' }} // Subscript effect
@@ -122,7 +142,12 @@ const handleLogCalculate = () => {
           <button
             key={key}
             onClick={() => handleButtonClick(key)}
-            className="p-2 text-sm font-semibold bg-gray-200 rounded-md hover:bg-gray-300"
+            // className="p-2 text-sm font-semibold bg-gray-200 rounded-md hover:bg-gray-300"
+            className={`p-2 text-sm font-semibold rounded-md ${
+              (isRadians && key === 'Radians') || (!isRadians && key === 'Degrees')
+                ? 'bg-teal-500 text-white'
+                : 'bg-gray-200 text-black hover:bg-gray-300'
+            }`}
           >
             {key}
           </button>
@@ -132,9 +157,7 @@ const handleLogCalculate = () => {
           <button
             key={key}
             onClick={() => handleButtonClick(key)}
-            className={`p-2 rounded-md ${
-      isRadians ? 'bg-teal-500 text-white' : 'bg-gray-200 text-black hover:bg-gray-300'
-    }`}
+            className="p-2 text-sm font-semibold bg-gray-200 rounded-md hover:bg-gray-300"
           >
             {key}
           </button>
