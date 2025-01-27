@@ -6,6 +6,11 @@ const math = create(all);
 const FullCalculator: React.FC = () => {
   const [input, setInput] = useState<string>('');
   const [isRadians, setIsRadians] = useState<boolean>(true);
+  const [isLogMode, setIsLogMode] = useState<boolean>(false);
+    const [logBase, setLogBase] = useState<string>('');
+      const [logValue, setLogValue] = useState<string>('');
+
+
 
   const handleButtonClick = (value: string) => {
   if (value === '=') {
@@ -28,7 +33,9 @@ const FullCalculator: React.FC = () => {
     setInput(input + '/');
   } else if (value === '√'){
     setInput(input + 'sqrt(');
-  }else if (value === 'arcsin') {
+  }else if (value === 'log') {
+      setIsLogMode(true);
+    }else if (value === 'arcsin') {
 
     try {
       const inputValue = parseFloat(input);
@@ -52,11 +59,61 @@ const FullCalculator: React.FC = () => {
   }
 };
 
+const handleLogCalculate = () => {
+    try {
+      const base = parseFloat(logBase);
+      const value = parseFloat(logValue);
+
+      if (isNaN(base) || isNaN(value)) {
+        setInput('Error: Invalid Input');
+      } else {
+        const result = math.log(value, base);
+        setInput(result.toString());
+      }
+    } catch (error) {
+      setInput('Error');
+    }
+
+    // Reset log inputs
+    setIsLogMode(false);
+    setLogBase('');
+    setLogValue('');
+  };
+
 
   return (
     <div className="flex flex-col items-center w-full max-w-xl p-4 mx-auto bg-white shadow-md rounded-md">
       <div className="w-full p-4 mb-4 text-lg font-medium text-gray-800 bg-gray-100 rounded-md">
-        <div className="text-gray-700">{input || '0'}</div>
+        {/* <div className="text-gray-700">{input || '0'}</div> */}
+        {isLogMode ? (
+          <div className="flex items-center text-gray-700">
+            <span>log</span>
+            <span className="relative">
+              <input
+                type="text"
+                value={logBase}
+                onChange={(e) => setLogBase(e.target.value)}
+                className="absolute top-1 left-0 w-4 p-1 text-xs text-center border-b border-gray-400 focus:outline-none"
+                style={{ fontSize: '0.8em', transform: 'translateY(4px)', backgroundColor:'#d9dbde' }} // Subscript effect
+              />
+            </span>
+            <input
+              type="text"
+              value={logValue}
+              onChange={(e) => setLogValue(e.target.value)}
+              className="w-5 p-1 ml-4 text-center border-b border-gray-400 focus:outline-none"
+              style={{backgroundColor:'#d9dbde'}}
+            />
+            <button
+              onClick={handleLogCalculate}
+              className="ml-2 px-2 py-1 text-sm text-white bg-teal-500 rounded-md hover:bg-teal-600"
+            >
+              Calculate
+            </button>
+          </div>
+        ) : (
+          <div className="text-gray-700">{input || '0'}</div>
+        )}
       </div>
 
       <div className="grid grid-cols-7 gap-2 w-full">
