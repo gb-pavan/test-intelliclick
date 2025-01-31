@@ -5,6 +5,8 @@ import Matrix from './Matrix';
 import Integration from './Integrations';
 import TrigonometricFunctions from './Trignometry';
 import { create, all } from 'mathjs';
+import GreekSymbolsGrid from './GreekSymbols';
+import GreekAlphabet from './GreekAlphabet';
 
 const math = create(all);
 
@@ -15,8 +17,8 @@ const CalculatorTabs: React.FC = () => {
 
   const tabs = [
     { label: 'Basic', content: 'Basic Calculator Functions' },
-    { label: 'αβγ', content: 'Greek Letters and Symbols' },
-    { label: 'ABΓ', content: 'Advanced Symbols' },
+    { label: 'αβγ', content: <GreekSymbolsGrid setSelectedInput={setSelectedInput}/> },
+    { label: 'ABΓ', content: <GreekAlphabet setSelectedInput={setSelectedInput} /> },
     { label: 'sin cos', content: <TrigonometricFunctions setSelectedInput={setSelectedInput} /> },
     { label: '≥ ÷ →', content: 'Comparison & Arithmetic' },
     { label: 'π√∇', content: 'Pi, Roots & Operators' },
