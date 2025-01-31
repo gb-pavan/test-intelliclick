@@ -3,13 +3,17 @@ import { create, all } from 'mathjs';
 
 const math = create(all);
 
-const FullCalculator: React.FC = () => {
+interface FullCalculatorProps {
+  // setSelectedInput: (value: string) => void;
+    setSelectedInput: (value: string | ((prev: string) => string)) => void;
+}
+
+const FullCalculator: React.FC<FullCalculatorProps> = ({setSelectedInput}) => {
   const [input, setInput] = useState<string>('');
   const [isRadians, setIsRadians] = useState<boolean>(true);
   const [isLogMode, setIsLogMode] = useState<boolean>(false);
-    const [logBase, setLogBase] = useState<string>('');
-      const [logValue, setLogValue] = useState<string>('');
-
+  const [logBase, setLogBase] = useState<string>('');
+  const [logValue, setLogValue] = useState<string>('');
 
 
   const handleButtonClick = (value: string) => {
@@ -24,16 +28,21 @@ const FullCalculator: React.FC = () => {
   } else if (value === 'clear') {
     setIsLogMode(false)
     setInput('');
+    setSelectedInput('');
   } else if (value === 'Radians' || value === 'Degrees') {
     setIsRadians(value === 'Radians');
   } else if (value === 'x^') {
     setInput(input + '^');
+    setSelectedInput(input + '^');
   } else if (value === '×'){
     setInput(input + '*');
+    setSelectedInput(input + '*');
   } else if (value === '÷'){
     setInput(input + '/');
+    setSelectedInput(prev => prev  + '/');
   } else if (value === '√'){
     setInput(input + 'sqrt(');
+    setSelectedInput(input + 'sqrt(');
   }else if (value === 'log') {
       setIsLogMode(true);
     }else if (['arcsin', 'arccos', 'arctan'].includes(value)) {
@@ -75,6 +84,7 @@ const FullCalculator: React.FC = () => {
   
   else {
     setInput(input + value);
+    setSelectedInput(prev => prev + value);
   }
 };
 

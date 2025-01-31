@@ -4,21 +4,26 @@ import PeriodicTable from './PeriodicTable';
 import Matrix from './Matrix';
 import Integration from './Integrations';
 import TrigonometricFunctions from './Trignometry';
+import { create, all } from 'mathjs';
+
+const math = create(all);
+
 
 const CalculatorTabs: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string>('Basic');
+  const [selectedInput,setSelectedInput] = useState<string>('');
 
   const tabs = [
     { label: 'Basic', content: 'Basic Calculator Functions' },
     { label: 'αβγ', content: 'Greek Letters and Symbols' },
     { label: 'ABΓ', content: 'Advanced Symbols' },
-    { label: 'sin cos', content: <TrigonometricFunctions /> },
+    { label: 'sin cos', content: <TrigonometricFunctions setSelectedInput={setSelectedInput} /> },
     { label: '≥ ÷ →', content: 'Comparison & Arithmetic' },
     { label: 'π√∇', content: 'Pi, Roots & Operators' },
     { label: 'Σ∫∏', content: <Integration /> },
     { label: '()', content: <Matrix /> },
     { label: 'H₂O', content: <PeriodicTable /> },
-    { label: 'Calculator', content: <FullCalculator /> },
+    { label: 'Calculator', content: <FullCalculator setSelectedInput={setSelectedInput} /> },
   ];
 
   const operations = [
@@ -39,6 +44,21 @@ const CalculatorTabs: React.FC = () => {
     console.log(`Operation clicked: ${value}`);
     // Handle operation logic here
   };
+
+  const handleResult = () => {
+    
+    try {
+      console.log("selinpit",typeof(selectedInput));
+      const sanitizedExpression = selectedInput.replace(/π/g, `(${Math.PI})`);
+
+      const evaluation = math.evaluate(sanitizedExpression);
+      console.log("evaluation",evaluation);
+      setSelectedInput(evaluation.toString());
+    } catch (error) {
+      setSelectedInput('Error');
+    }
+  
+  } 
 
   return (
     <div className="flex flex-col items-center w-full max-w-4xl p-4 mx-auto bg-white shadow-md rounded-md">
@@ -83,6 +103,12 @@ const CalculatorTabs: React.FC = () => {
           </>
         )}
       </div>
+      {selectedInput !== '' 
+      && 
+      <div className="flex justify-between w-full p-4 mb-4 text-lg font-medium text-gray-800 bg-gray-100 rounded-md">
+        <div>{selectedInput}</div>
+        <button className='bg-green-600 rounded-md' onClick={()=>handleResult()}>Evaluate</button>
+      </div>}
     </div>
   );
 };

@@ -26,12 +26,19 @@ const operations = [
   { label: 'arcsech', value: 'arcsech(' },
 ];
 
-const TrigonometricFunctions: React.FC = () => {
+interface TrigonometricFunctionsProps {
+  // setSelectedInput: (value: string) => void;
+    setSelectedInput: (value: string | ((prev: string) => string)) => void;
+}
+
+
+const TrigonometricFunctions: React.FC<TrigonometricFunctionsProps> = ({ setSelectedInput }) => {
   const [input, setInput] = useState<string>('');
   const [result, setResult] = useState<string>('');
 
   const handleClick = (value: string) => {
     setInput((prev) => prev + value);
+    setSelectedInput((prev) => prev + value);
   };
 
   const handleEvaluate = () => {
