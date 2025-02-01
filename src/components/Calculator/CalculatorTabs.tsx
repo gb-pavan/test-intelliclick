@@ -7,6 +7,9 @@ import TrigonometricFunctions from './Trignometry';
 import { create, all } from 'mathjs';
 import GreekSymbolsGrid from './GreekSymbols';
 import GreekAlphabet from './GreekAlphabet';
+import MathSymbolsGrid from './MathSymbols';
+import MathRelations from './MathRelations';
+import MathSubsets from './MathSubsets';
 
 const math = create(all);
 
@@ -16,12 +19,12 @@ const CalculatorTabs: React.FC = () => {
   const [selectedInput,setSelectedInput] = useState<string>('');
 
   const tabs = [
-    { label: 'Basic', content: 'Basic Calculator Functions' },
+    { label: 'Basic', content: <MathSymbolsGrid setSelectedInput={setSelectedInput}/> },
     { label: 'αβγ', content: <GreekSymbolsGrid setSelectedInput={setSelectedInput}/> },
     { label: 'ABΓ', content: <GreekAlphabet setSelectedInput={setSelectedInput} /> },
     { label: 'sin cos', content: <TrigonometricFunctions setSelectedInput={setSelectedInput} /> },
-    { label: '≥ ÷ →', content: 'Comparison & Arithmetic' },
-    { label: 'π√∇', content: 'Pi, Roots & Operators' },
+    { label: '≥ ÷ →', content: <MathRelations setSelectedInput={setSelectedInput}/> },
+    { label: 'π√∇', content: <MathSubsets setSelectedInput={setSelectedInput}/> },
     { label: 'Σ∫∏', content: <Integration /> },
     { label: '()', content: <Matrix /> },
     { label: 'H₂O', content: <PeriodicTable /> },
