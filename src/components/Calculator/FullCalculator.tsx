@@ -57,7 +57,6 @@ const FullCalculator: React.FC<FullCalculatorProps> = ({setSelectedInput}) => {
         return;
       }
 
-      // Perform calculations based on the selected function
       const result = (() => {
         if (value === 'arcsin') {
           return isRadians
@@ -79,9 +78,7 @@ const FullCalculator: React.FC<FullCalculatorProps> = ({setSelectedInput}) => {
   } catch (error) {
     setInput('Error');
   }
-}
-
-  
+}  
   else {
     setInput(input + value);
     setSelectedInput(prev => prev + value);

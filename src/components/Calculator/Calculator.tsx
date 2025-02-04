@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
 import { create, all } from 'mathjs';
 
+interface CalculatorProps {
+    setSelectedInput: (value: string | ((prev: string) => string)) => void;
+}
+
 const math = create(all);
 
-const Calculator: React.FC = () => {
+const Calculator: React.FC<CalculatorProps> = ({setSelectedInput}) => {
   const [input, setInput] = useState<string>('');
   const [result, setResult] = useState<string | number>('');
 
@@ -19,6 +23,7 @@ const Calculator: React.FC = () => {
       setInput('');
       setResult('');
     } else {
+      setSelectedInput(prev => prev + input + value);
       setInput(input + value);
     }
   };
