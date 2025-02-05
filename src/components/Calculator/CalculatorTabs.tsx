@@ -216,6 +216,10 @@ const CalculatorTabs: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string>('Basic');
   const [selectedInput, setSelectedInput] = useState<string>('');
   const [inputValues, setInputValues] = useState<{ [key: number]: string }>({});
+  const [limits, setLimits] = useState({ lower: '', upper: '' });
+  const [functionInput, setFunctionInput] = useState<string>('');
+  const [input, setInput] = useState<string>('');
+  const [selectedIntegral, setSelectedIntegral] = useState<boolean>(false);
 
   const tabs = [
     { label: 'Basic', content: <MathSymbolsGrid setSelectedInput={setSelectedInput}/> },
@@ -224,7 +228,7 @@ const CalculatorTabs: React.FC = () => {
     { label: 'sin cos', content: <TrigonometricFunctions setSelectedInput={setSelectedInput} /> },
     { label: '≥ ÷ →', content: <MathRelations setSelectedInput={setSelectedInput}/> },
     { label: 'π√∇', content: <MathSubsets setSelectedInput={setSelectedInput}/> },
-    { label: 'Σ∫∏', content: <Integration /> },
+    { label: 'Σ∫∏', content: <Integration setSelectedInput={setSelectedInput}/> },
     { label: '()', content: <Matrix /> },
     { label: 'H₂O', content: <PeriodicTable /> },
     { label: 'Calculator', content: <FullCalculator setSelectedInput={setSelectedInput} /> },
@@ -273,9 +277,29 @@ const CalculatorTabs: React.FC = () => {
   //   });
   // };
 
+  const handleLimitChange = (e: React.ChangeEvent<HTMLInputElement>, type: 'lower' | 'upper') => {
+    setLimits({ ...limits, [type]: e.target.value });
+  };
+
+  const handleFunctionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFunctionInput(e.target.value);
+  };
+
+  const handleApplyLimits = () => {
+    if (limits.lower && limits.upper && functionInput) {
+      setInput(
+        (prev) =>
+          `${prev} definiteIntegral(${limits.lower}, ${limits.upper}, ${functionInput}, dx)`
+      );
+      setSelectedIntegral(false);
+      setLimits({ lower: '', upper: '' });
+      setFunctionInput('');
+    }
+  };
+
   const renderInputExpression = () => {
   let count = 0;
-  return selectedInput.split(/(x\^□|□)/g).map((part, index) => {
+  return selectedInput.split(/(x\^□|□|∫□□)/g).map((part, index) => {
     if (part === '□') {
       return (
         <input
@@ -306,6 +330,45 @@ const CalculatorTabs: React.FC = () => {
           </sup>
         </span>
       );
+    } else if (part === '∫□□') {
+      console.log("integral yesss");
+      return (
+      <div className="flex flex-col items-center mb-4">
+          {/* Integral symbol with function input next to it */}
+          <div className="flex items-center">
+            <div className="flex flex-col items-center">
+              <input
+                type="text"
+                value={limits.upper}
+                onChange={(e) => handleLimitChange(e, 'upper')}
+                className="w-20 p-1 border rounded-md text-center mb-1"
+                placeholder="Upper"
+              />
+              <span className="text-2xl">∫</span>
+              <input
+                type="text"
+                value={limits.lower}
+                onChange={(e) => handleLimitChange(e, 'lower')}
+                className="w-20 p-1 border rounded-md text-center mt-1"
+                placeholder="Lower"
+              />
+            </div>
+            <input
+              type="text"
+              value={functionInput}
+              onChange={handleFunctionChange}
+              className="w-40 p-1 border rounded-md text-center ml-2"
+              placeholder="Function (e.g., x^2)"
+            />
+          </div>
+
+          {/* <button
+            onClick={handleApplyLimits}
+            className="mt-2 px-3 py-1 bg-blue-500 text-white rounded-md"
+          >
+            Apply Limits
+          </button> */}
+        </div>)
     }
     return <span key={index}>{part}</span>;
   });

@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
 import { evaluate } from 'mathjs';
 
+interface IntegrationAndDerivativesProps {
+  // setSelectedInput: (value: string) => void;
+    setSelectedInput: (value: string | ((prev: string) => string)) => void;
+}
+
 const operations = [
   { label: '∫', value: 'integral(' },
   { label: '∬', value: 'doubleIntegral(' },
@@ -26,12 +31,13 @@ const operations = [
 //   { label: '∛□', value: 'cbrt(' },
 ];
 
-const IntegrationAndDerivatives: React.FC = () => {
+const IntegrationAndDerivatives: React.FC<IntegrationAndDerivativesProps> = ({setSelectedInput}) => {
   const [input, setInput] = useState<string>('');
   const [result, setResult] = useState<string>('');
 
   const handleClick = (value: string) => {
     setInput((prev) => prev + value);
+    setSelectedInput((prev) => prev + value);
   };
 
   const handleEvaluate = () => {
@@ -66,7 +72,7 @@ const IntegrationAndDerivatives: React.FC = () => {
         {operations.map((operation) => (
           <button
             key={operation.label}
-            onClick={() => handleClick(operation.value)}
+            onClick={() => handleClick(operation.label)}
             className="p-2 bg-blue-100 hover:bg-blue-200 rounded-md text-sm"
           >
             {operation.label}
