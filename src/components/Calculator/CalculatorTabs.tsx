@@ -331,9 +331,8 @@ const CalculatorTabs: React.FC = () => {
         </span>
       );
     } else if (part === '∫□□') {
-      console.log("integral yesss");
       return (
-      <div className="flex flex-col items-center mb-4">
+      <div className="flex flex-col items-center mb-4" key={index}>
           {/* Integral symbol with function input next to it */}
           <div className="flex items-center">
             <div className="flex flex-col items-center">
