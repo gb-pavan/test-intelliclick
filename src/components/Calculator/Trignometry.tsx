@@ -138,6 +138,7 @@ const TrigonometricFunctions: React.FC<TrigonometricFunctionsProps> = ({ setSele
   const [expression, setExpression] = useState<React.ReactNode[]>([]);
 
   const handleClick = (func: string) => {
+    setSelectedInput(func)
     setExpression((prev) => [
       ...prev,
       <span key={prev.length} className="flex items-center space-x-1">
@@ -158,9 +159,9 @@ const TrigonometricFunctions: React.FC<TrigonometricFunctionsProps> = ({ setSele
 
   return (
     <div className="bg-white shadow-md rounded-md p-4 w-full mx-auto">
-      <div className="mb-4 p-2 border rounded-md min-h-[40px] flex flex-wrap gap-2 bg-gray-50">
+      {/* <div className="mb-4 p-2 border rounded-md min-h-[40px] flex flex-wrap gap-2 bg-gray-50">
         {expression}
-      </div>
+      </div> */}
 
       <div className="grid grid-cols-6 gap-2">
         {operations.map((operation) => (
@@ -174,14 +175,14 @@ const TrigonometricFunctions: React.FC<TrigonometricFunctionsProps> = ({ setSele
         ))}
       </div>
 
-      <div className="mt-4 flex gap-2">
+      {/* <div className="mt-4 flex gap-2">
         <button
           onClick={handleClear}
           className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-md"
         >
           Clear
         </button>
-      </div>
+      </div> */}
     </div>
   );
 };
