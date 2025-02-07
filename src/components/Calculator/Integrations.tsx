@@ -14,7 +14,7 @@ const operations = [
   { label: '∬□□', value: 'doubleDefiniteIntegral(lower1, upper1, lower2, upper2, ' },
   { label: '∭□□', value: 'tripleDefiniteIntegral(lower1, upper1, lower2, upper2, lower3, upper3, ' },
   { label: 'Σ', value: 'sum(' },
-  { label: 'Π', value: 'product(' },
+  { label: '∏', value: 'product(' },
   { label: 'lim', value: 'limit(' },
   { label: 'lim→∞', value: 'limitToInfinity(' },
   { label: 'lim x→0-', value: 'limit(x, 0, -)' },

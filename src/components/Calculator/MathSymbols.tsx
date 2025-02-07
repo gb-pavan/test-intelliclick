@@ -5,8 +5,8 @@ interface MathSymbolsProps {
 }
 
 const mathSymbols = [
-  ['≥', '≤', '⋅', '÷', 'x⁰', '(□)', '|□|', '(f∘g)', 'f(x)', 'ln', 'e□'],
-  ["(□)'", '∂/∂x', '∫□□', 'lim', '∑', 'sin', 'cos', 'tan', 'cot', 'csc', 'sec']
+  ['≥', '≤', '⋅', '÷', 'x⁰', '(□)', '|□|', '(f∘g)', 'f(x)', 'ln', 'e⁽□⁾'],
+  ["(□)'", '∂/∂x', '∫□□', 'lim', 'Σ', 'sin', 'cos', 'tan', 'cot', 'csc', 'sec']
 ];
 
 const MathSymbolsGrid: React.FC<MathSymbolsProps> = ({setSelectedInput}) => {
