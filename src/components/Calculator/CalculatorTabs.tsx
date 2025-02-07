@@ -45,7 +45,10 @@ const CalculatorTabs: React.FC = () => {
     { label: '≥ ÷ →', content: <MathRelations setSelectedInput={setSelectedInput}/> },
     { label: 'π√∇', content: <MathSubsets setSelectedInput={setSelectedInput}/> },
     { label: 'Σ∫∏', content: <Integration setSelectedInput={setSelectedInput}/> },
-    { label: '()', content: <Matrix /> },
+    {
+  label: '(□ □\n □ □)',
+  content: <Matrix />
+},
     { label: 'H₂O', content: <PeriodicTable /> },
     { label: 'Calculator', content: <FullCalculator setSelectedInput={setSelectedInput} /> },
   ];
@@ -55,7 +58,7 @@ const CalculatorTabs: React.FC = () => {
     { label: 'x^□', value: '^' },
     { label: '√□', value: 'sqrt(' },
     { label: '∛□', value: 'cbrt(' },
-    { label: '□□', value: '**' },
+    { label: '□ / □', value: '**' },
     { label: 'log□', value: 'log(' },
     { label: 'π', value: 'pi' },
     { label: 'θ', value: 'theta' },
@@ -94,7 +97,7 @@ const CalculatorTabs: React.FC = () => {
 
   const renderInputExpression = () => {
   let count = 0;
-  return selectedInput.split(/(x\^□|□|∫□□|sin|cos|tan|cot|csc|lim|ln|d²\/dx²|d\/dx|sec|∬□□|∭□□□|∂\/∂x)/g).map((part, index) => {
+  return selectedInput.split(/(x\^□|□|∫□□|sin|cos|tan|cot|csc|lim|ln|d²\/dx²|d\/dx|sec|∬□□|∭□□□|∏|∭|∬|∫|∂\/∂x)/g).map((part, index) => {
     if (part === '□') {
       return (
         <input
@@ -209,7 +212,25 @@ else if (part === 'd²/dx²') {
       </div>
     </span>
   );
+}if (part === '∫' || part === '∬' || part === '∭') {
+  return (
+    <span key={index} className="inline-flex items-center">
+      {/* Integral symbol */}
+      <span>{part}</span>
+      {/* Input field next to the integral */}
+      <input
+        type="text"
+        value={inputValues[count] || ''}
+        size={(inputValues[count] || '').length || 1}
+        autoFocus
+        onChange={(e) => handleInputChange(count++, e.target.value)}
+        className="p-1 text-xs text-center border-b border-gray-400 focus:outline-none ml-1"
+        style={{ fontSize: "0.8em", width: "auto", backgroundColor: "#d9dbde" }}
+      />
+    </span>
+  );
 }
+
 
 
     
@@ -228,6 +249,45 @@ else if (part === 'd²/dx²') {
                 placeholder="Upper"
               />
               <span className="text-2xl">∫</span>
+              <input
+                type="text"
+                value={limits.lower}
+                onChange={(e) => handleLimitChange(e, 'lower')}
+                className="w-20 p-1 border rounded-md text-center mt-1"
+                placeholder="Lower"
+              />
+            </div>
+            <input
+              type="text"
+              value={functionInput}
+              onChange={handleFunctionChange}
+              className="w-40 p-1 border rounded-md text-center ml-2"
+              placeholder="Function (e.g., x^2)"
+            />
+          </div>
+
+          {/* <button
+            onClick={handleApplyLimits}
+            className="mt-2 px-3 py-1 bg-blue-500 text-white rounded-md"
+          >
+            Apply Limits
+          </button> */}
+        </div>)
+    }
+    else if (part === '∏') {
+      return (
+      <div className="flex flex-col items-center mb-4" key={index}>
+          {/* Integral symbol with function input next to it */}
+          <div className="flex items-center">
+            <div className="flex flex-col items-center">
+              <input
+                type="text"
+                value={limits.upper}
+                onChange={(e) => handleLimitChange(e, 'upper')}
+                className="w-20 p-1 border rounded-md text-center mb-1"
+                placeholder="Upper"
+              />
+              <span className="text-2xl">∏</span>
               <input
                 type="text"
                 value={limits.lower}

@@ -24,11 +24,6 @@ const operations = [
   { label: '□\'', value: '(□)\'' },
   { label: '□\'\'', value: '(□)\'\'' },
   { label: '∂/∂x', value: 'partialDerivative(' },
-  
-//   { label: '□²', value: '^2' },
-  
-//   { label: '√□', value: 'sqrt(' },
-//   { label: '∛□', value: 'cbrt(' },
 ];
 
 const IntegrationAndDerivatives: React.FC<IntegrationAndDerivativesProps> = ({setSelectedInput}) => {
