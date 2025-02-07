@@ -14,10 +14,25 @@ import MathSubsets from './MathSubsets';
 const math = create(all);
 
 const CalculatorTabs: React.FC = () => {
+  const type: 'double' | 'single' = 'double'; // Example value
+
   const [activeTab, setActiveTab] = useState<string>('Basic');
   const [selectedInput, setSelectedInput] = useState<string>('');
   const [inputValues, setInputValues] = useState<{ [key: number]: string }>({});
-  const [limits, setLimits] = useState({ lower: '', upper: '' });
+  // const [limits, setLimits] = useState({ lower: '', upper: '' });
+  // const [limits, setLimits] = useState(
+  //   type === 'double'
+  //     ? { outerUpper: '', outerLower: '', innerUpper: '', innerLower: '' }
+  //     : { upper: '', lower: '' }
+  // );
+  const [limits, setLimits] = useState(
+  type === 'double'
+    ? { outerUpper: '', outerLower: '', innerUpper: '', innerLower: '' }
+    : type === 'triple'
+    ? { outerUpper: '', outerLower: '', middleUpper: '', middleLower: '', innerUpper: '', innerLower: '' }
+    : { upper: '', lower: '' }
+);
+
   const [functionInput, setFunctionInput] = useState<string>('');
   const [input, setInput] = useState<string>('');
   const [selectedIntegral, setSelectedIntegral] = useState<boolean>(false);
@@ -57,7 +72,7 @@ const CalculatorTabs: React.FC = () => {
     setInputValues(prev => ({ ...prev, [index]: value }));
   };
 
-  const handleLimitChange = (e: React.ChangeEvent<HTMLInputElement>, type: 'lower' | 'upper') => {
+  const handleLimitChange = (e: React.ChangeEvent<HTMLInputElement>, type: 'lower' | 'upper' | 'outerUpper' | 'outerLower' | 'innerUpper' | 'innerLower' | 'middleLower' | 'middleUpper') => {
     setLimits({ ...limits, [type]: e.target.value });
   };
 
@@ -79,7 +94,7 @@ const CalculatorTabs: React.FC = () => {
 
   const renderInputExpression = () => {
   let count = 0;
-  return selectedInput.split(/(x\^□|□|∫□□|sin|cos|tan|cot|csc|lim|ln|d²\/dx²|d\/dx|sec|∂\/∂x)/g).map((part, index) => {
+  return selectedInput.split(/(x\^□|□|∫□□|sin|cos|tan|cot|csc|lim|ln|d²\/dx²|d\/dx|sec|∬□□|∭□□□|∂\/∂x)/g).map((part, index) => {
     if (part === '□') {
       return (
         <input
@@ -238,6 +253,129 @@ else if (part === 'd²/dx²') {
           </button> */}
         </div>)
     }
+    else if (part === '∬□□') {
+      // console.log("yessssssssss");
+      // return (
+      // <>
+      //       {/* Outer Integral Limits */}
+      //       <div className="flex flex-col items-center">
+      //         <input
+      //           type="text"
+      //           value={limits.outerUpper}
+      //           onChange={(e) => handleLimitChange(e, 'outerUpper')}
+      //           className="w-20 p-1 border rounded-md text-center mb-1"
+      //           placeholder="Outer Upper"
+      //         />
+      //         <span className="text-2xl">∬</span>
+      //         <input
+      //           type="text"
+      //           value={limits.outerLower}
+      //           onChange={(e) => handleLimitChange(e, 'outerLower')}
+      //           className="w-20 p-1 border rounded-md text-center mt-1"
+      //           placeholder="Outer Lower"
+      //         />
+      //       </div>
+
+      //       {/* Inner Integral Limits */}
+      //       <div className="flex flex-col items-center ml-4">
+      //         <input
+      //           type="text"
+      //           value={limits.innerUpper}
+      //           onChange={(e) => handleLimitChange(e, 'innerUpper')}
+      //           className="w-20 p-1 border rounded-md text-center mb-1"
+      //           placeholder="Inner Upper"
+      //         />
+      //         <span className="text-2xl">∫</span>
+      //         <input
+      //           type="text"
+      //           value={limits.innerLower}
+      //           onChange={(e) => handleLimitChange(e, 'innerLower')}
+      //           className="w-20 p-1 border rounded-md text-center mt-1"
+      //           placeholder="Inner Lower"
+      //         />
+      //       </div>
+      //     </>)
+      return (
+        <div className="flex items-center" key={index}>
+  {/* Double Integral with Limits (Repeated Twice) */}
+  {[...Array(2)].map((_, index) => (
+    <div key={index} className="relative flex flex-col items-center mx-2">
+      {/* Upper Limit */}
+      <input
+        type="text"
+        value={limits[index === 0 ? 'outerUpper' : 'innerUpper']}
+        onChange={(e) => handleLimitChange(e, index === 0 ? 'outerUpper' : 'innerUpper')}
+        className=" w-8 p-1 border rounded-md text-center"
+        placeholder="Upper"
+      />
+      {/* Integral Symbol */}
+      <span className="text-2xl">∫</span>
+      {/* Lower Limit */}
+      <input
+        type="text"
+        value={limits[index === 0 ? 'outerLower' : 'innerLower']}
+        onChange={(e) => handleLimitChange(e, index === 0 ? 'outerLower' : 'innerLower')}
+        className=" w-8 p-1 border rounded-md text-center"
+        placeholder="Lower"
+      />
+    </div>
+  ))}
+
+  {/* Input Field to the Right */}
+  <input
+    type="text"
+    className="w-32 p-1 border rounded-md text-center"
+    placeholder="Function"
+  />
+</div>
+
+      )
+    }
+    else if (part === '∭□□□') {
+  return (
+    <div className="flex items-center" key={index}>
+      {/* Triple Integral with Limits (Repeated Three Times) */}
+      {[...Array(3)].map((_, index) => (
+        <div key={index} className="relative flex flex-col items-center mx-2">
+          {/* Upper Limit */}
+          <input
+            type="text"
+            value={limits[
+              index === 0 ? 'outerUpper' : index === 1 ? 'middleUpper' : 'innerUpper'
+            ]}
+            onChange={(e) =>
+              handleLimitChange(e, index === 0 ? 'outerUpper' : index === 1 ? 'middleUpper' : 'innerUpper')
+            }
+            className="w-8 p-1 border rounded-md text-center"
+            placeholder="Upper"
+          />
+          {/* Integral Symbol */}
+          <span className="text-2xl">∫</span>
+          {/* Lower Limit */}
+          <input
+            type="text"
+            value={limits[
+              index === 0 ? 'outerLower' : index === 1 ? 'middleLower' : 'innerLower'
+            ]}
+            onChange={(e) =>
+              handleLimitChange(e, index === 0 ? 'outerLower' : index === 1 ? 'middleLower' : 'innerLower')
+            }
+            className="w-8 p-1 border rounded-md text-center"
+            placeholder="Lower"
+          />
+        </div>
+      ))}
+
+      {/* Input Field to the Right */}
+      <input
+        type="text"
+        className="w-32 p-1 border rounded-md text-center"
+        placeholder="Function"
+      />
+    </div>
+  );
+}
+
      else if (part === 'Σ') {
   return (
     <div className="flex flex-col items-center mb-4" key={index}>
