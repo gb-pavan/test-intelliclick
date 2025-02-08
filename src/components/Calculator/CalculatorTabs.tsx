@@ -42,13 +42,13 @@ const CalculatorTabs: React.FC<CalculatorTabsProps> = ({handleCalculatorInput}) 
   const [selectedIntegral, setSelectedIntegral] = useState<boolean>(false);
 
   const tabs = [
-    { label: 'Basic', content: <MathSymbolsGrid setSelectedInput={setSelectedInput} /> },
+    { label: 'Basic', content: <MathSymbolsGrid setSelectedInput={setSelectedInput} handleCalculatorInput={handleCalculatorInput}/> },
     { label: 'αβγ', content: <GreekSymbolsGrid setSelectedInput={setSelectedInput} handleCalculatorInput={handleCalculatorInput} /> },
-    { label: 'ABΓ', content: <GreekAlphabet setSelectedInput={setSelectedInput} /> },
-    { label: 'sin cos', content: <TrigonometricFunctions setSelectedInput={setSelectedInput} /> },
-    { label: '≥ ÷ →', content: <MathRelations setSelectedInput={setSelectedInput}/> },
-    { label: 'π√∇', content: <MathSubsets setSelectedInput={setSelectedInput}/> },
-    { label: 'Σ∫∏', content: <Integration setSelectedInput={setSelectedInput}/> },
+    { label: 'ABΓ', content: <GreekAlphabet setSelectedInput={setSelectedInput} handleCalculatorInput={handleCalculatorInput}/> },
+    { label: 'sin cos', content: <TrigonometricFunctions setSelectedInput={setSelectedInput} handleCalculatorInput={handleCalculatorInput}/> },
+    { label: '≥ ÷ →', content: <MathRelations setSelectedInput={setSelectedInput} handleCalculatorInput={handleCalculatorInput}/> },
+    { label: 'π√∇', content: <MathSubsets setSelectedInput={setSelectedInput} handleCalculatorInput={handleCalculatorInput}/> },
+    { label: 'Σ∫∏', content: <Integration setSelectedInput={setSelectedInput} handleCalculatorInput={handleCalculatorInput}/> },
     {
   label: '(□ □\n □ □)',
   content: <Matrix />

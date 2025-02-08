@@ -2,6 +2,8 @@ import React from 'react';
 
 interface GreekAlphabetProps {
     setSelectedInput: (value: string | ((prev: string) => string)) => void;
+          handleCalculatorInput: (value: string) => void;
+
 }
 
 const GreekAlphabets = [
@@ -9,10 +11,11 @@ const GreekAlphabets = [
   ['Ν', 'Ξ', 'Π', 'Ρ', 'Σ', 'Τ', 'Υ', 'Φ', 'Χ', 'Ψ', 'Ω']
 ];
 
-const GreekAlphabet: React.FC<GreekAlphabetProps> = ({setSelectedInput}) => {
+const GreekAlphabet: React.FC<GreekAlphabetProps> = ({setSelectedInput,handleCalculatorInput}) => {
 
   const handleClick = (value: string) => {
     setSelectedInput((prev) => prev + value);
+    handleCalculatorInput(value);
   };
   return (
     <div className="bg-white shadow-md rounded-md w-full mx-auto">

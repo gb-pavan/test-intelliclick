@@ -2,7 +2,7 @@ import React from 'react';
 
 interface MathSymbolsProps {
     setSelectedInput: (value: string | ((prev: string) => string)) => void;
-
+    handleCalculatorInput: (value: string) => void;
 }
 
 const mathSymbols = [
@@ -10,10 +10,11 @@ const mathSymbols = [
   ["(□)'", '∂/∂x', '∫□□', 'lim', 'Σ', 'sin', 'cos', 'tan', 'cot', 'csc', 'sec']
 ];
 
-const MathSymbolsGrid: React.FC<MathSymbolsProps> = ({setSelectedInput}) => {
+const MathSymbolsGrid: React.FC<MathSymbolsProps> = ({setSelectedInput,handleCalculatorInput}) => {
 
   const handleClick = (value: string) => {
     setSelectedInput((prev) => prev + value);
+    handleCalculatorInput(value)
   };
   return (
     <div className="bg-white shadow-md rounded-md p-4 w-full mx-auto">

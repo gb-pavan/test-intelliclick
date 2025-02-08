@@ -132,9 +132,11 @@ const operations = [
 
 interface TrigonometricFunctionsProps {
   setSelectedInput: (value: string | ((prev: string) => string)) => void;
+        handleCalculatorInput: (value: string) => void;
+
 }
 
-const TrigonometricFunctions: React.FC<TrigonometricFunctionsProps> = ({ setSelectedInput }) => {
+const TrigonometricFunctions: React.FC<TrigonometricFunctionsProps> = ({ setSelectedInput,handleCalculatorInput }) => {
   const [expression, setExpression] = useState<React.ReactNode[]>([]);
 
   const handleClick = (func: string) => {
@@ -151,6 +153,7 @@ const TrigonometricFunctions: React.FC<TrigonometricFunctionsProps> = ({ setSele
         <span>)</span>
       </span>,
     ]);
+    handleCalculatorInput(func);
   };
 
   const handleClear = () => {

@@ -4,6 +4,7 @@ import { evaluate } from 'mathjs';
 interface IntegrationAndDerivativesProps {
   // setSelectedInput: (value: string) => void;
     setSelectedInput: (value: string | ((prev: string) => string)) => void;
+          handleCalculatorInput: (value: string) => void;
 }
 
 const operations = [
@@ -26,13 +27,14 @@ const operations = [
   { label: '∂/∂x', value: 'partialDerivative(' },
 ];
 
-const IntegrationAndDerivatives: React.FC<IntegrationAndDerivativesProps> = ({setSelectedInput}) => {
+const IntegrationAndDerivatives: React.FC<IntegrationAndDerivativesProps> = ({setSelectedInput,handleCalculatorInput}) => {
   const [input, setInput] = useState<string>('');
   const [result, setResult] = useState<string>('');
 
   const handleClick = (value: string) => {
     setInput((prev) => prev + value);
     setSelectedInput((prev) => prev + value);
+    handleCalculatorInput(value);
   };
 
   const handleEvaluate = () => {

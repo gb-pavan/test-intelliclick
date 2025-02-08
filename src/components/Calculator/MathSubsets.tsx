@@ -2,6 +2,8 @@ import React from 'react';
 
 interface MathSymbolsProps {
     setSelectedInput: (value: string | ((prev: string) => string)) => void;
+          handleCalculatorInput: (value: string) => void;
+
 }
 
 const mathSymbols = [
@@ -9,9 +11,10 @@ const mathSymbols = [
   ['∨', '∧', '¬', '⊕', '∩', '∪', '□ᶜ', '⊂', '⊆', '⊃', '⊇']
 ];
 
-const MathSubsets: React.FC<MathSymbolsProps> = ({ setSelectedInput }) => {
+const MathSubsets: React.FC<MathSymbolsProps> = ({ setSelectedInput,handleCalculatorInput }) => {
   const handleClick = (value: string) => {
     setSelectedInput((prev) => prev + value);
+    handleCalculatorInput(value);
   };
 
   return (
