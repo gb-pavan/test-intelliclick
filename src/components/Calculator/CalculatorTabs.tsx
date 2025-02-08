@@ -13,7 +13,11 @@ import MathSubsets from './MathSubsets';
 
 const math = create(all);
 
-const CalculatorTabs: React.FC = () => {
+interface CalculatorTabsProps {
+  handleCalculatorInput: (value: string) => void;
+}
+
+const CalculatorTabs: React.FC<CalculatorTabsProps> = ({handleCalculatorInput}) => {
   const type: 'double' | 'single' = 'double'; // Example value
 
   const [activeTab, setActiveTab] = useState<string>('Basic');
@@ -38,8 +42,8 @@ const CalculatorTabs: React.FC = () => {
   const [selectedIntegral, setSelectedIntegral] = useState<boolean>(false);
 
   const tabs = [
-    { label: 'Basic', content: <MathSymbolsGrid setSelectedInput={setSelectedInput}/> },
-    { label: 'αβγ', content: <GreekSymbolsGrid setSelectedInput={setSelectedInput}/> },
+    { label: 'Basic', content: <MathSymbolsGrid setSelectedInput={setSelectedInput} /> },
+    { label: 'αβγ', content: <GreekSymbolsGrid setSelectedInput={setSelectedInput} handleCalculatorInput={handleCalculatorInput} /> },
     { label: 'ABΓ', content: <GreekAlphabet setSelectedInput={setSelectedInput} /> },
     { label: 'sin cos', content: <TrigonometricFunctions setSelectedInput={setSelectedInput} /> },
     { label: '≥ ÷ →', content: <MathRelations setSelectedInput={setSelectedInput}/> },
@@ -57,7 +61,7 @@ const CalculatorTabs: React.FC = () => {
     { label: '□²', value: '^2' },
     { label: 'x^□', value: '^' },
     { label: '√□', value: 'sqrt(' },
-    { label: '∛□', value: 'cbrt(' },
+    { label: '□√□', value: 'cbrt(' },
     { label: '□ / □', value: '**' },
     { label: 'log□', value: 'log(' },
     { label: 'π', value: 'pi' },
@@ -97,18 +101,22 @@ const CalculatorTabs: React.FC = () => {
 
   const renderInputExpression = () => {
   let count = 0;
-  return selectedInput.split(/(x\^□|□|∫□□|sin|cos|tan|cot|csc|lim|ln|d²\/dx²|d\/dx|sec|∬□□|∭□□□|∏|∭|∬|∫|∂\/∂x)/g).map((part, index) => {
+  return selectedInput.split(/(x\^□|□|∫□□|sin|cos|tan|cot|csc|□\/□|lim|ln|d²\/dx²|d\/dx|sec|∬□□|∭□□□|∏|√□|∭|∬|∫|□√□|∂\/∂x)/g).map((part, index) => {
     if (part === '□') {
+      console.log("hehehehe");
       return (
         <input
           key={index}
           type="text"
-          value={inputValues[count] || ''}
-          size={(inputValues[count] || '').length || 1}
+          // value={inputValues[count] || ''}
+          // size={(inputValues[count] || '').length || 1}
           autoFocus
-          onChange={(e) => handleInputChange(count++, e.target.value)}
-          className="p-1 text-xs text-center border-b border-gray-400 focus:outline-none"
-          style={{ fontSize: "0.8em", width: "auto", backgroundColor: "#d9dbde" }}
+           onInput={(e) =>
+          (e.currentTarget.style.width = `${e.currentTarget.value.length + 1}ch`)
+      }
+          // onChange={(e) => handleInputChange(count++, e.target.value)}
+          className="p-1 text-xs text-center border-b border-gray-400 focus:outline-none w-8"
+          style={{ fontSize: "0.8em", backgroundColor: "#d9dbde" }}
         />
       );
     } else if (part === 'x^□') {
@@ -127,8 +135,34 @@ const CalculatorTabs: React.FC = () => {
             />
           </sup>
         </span>
-      );
-    } else if (part === 'lim') {
+      );}
+    else if (part === '√□' || part === '□√□') {
+  return (
+    <div className="flex items-start text-2xl ml-3" key={index}>
+      {part === '□√□' && (
+      <input
+        type="text"
+        placeholder="n"
+        className="bg-transparent border-none outline-none text-right text-lg w-[1ch] min-w-[1ch]"
+        onInput={(e) =>
+          (e.currentTarget.style.width = `${e.currentTarget.value.length + 1}ch`)
+        }
+      />
+      )}
+      <span className="text-3xl">√</span>
+      <span className="relative border-t-2 border-black pt-1">
+        <input
+          type="text"
+          autoFocus
+          className="bg-transparent border-none outline-none text-center text-2xl w-[1ch] min-w-[1ch]"
+          onInput={(e) =>
+            (e.currentTarget.style.width = `${e.currentTarget.value.length + 1}ch`)
+          }
+        />
+      </span>
+    </div>
+  );
+    }else if (part === 'lim') {
       return (
         <span key={index} className="inline-flex flex-col items-start">
           {/* lim and input in the same line */}
@@ -148,8 +182,8 @@ const CalculatorTabs: React.FC = () => {
           <span className="text-xs ml-1">x → ∞</span>
         </span>
       );
-    } else if (part === 'ln') {
-  return (
+    }else if (part === 'ln') {
+     return (
     <span key={index} className="inline-flex flex-col items-start">
       {/* ln and input in the same line */}
       <div className="flex items-center">
@@ -166,8 +200,8 @@ const CalculatorTabs: React.FC = () => {
         <span>)</span>
       </div>
     </span>
-  );
-}else if (part === 'd/dx') {
+    );
+    }else if (part === 'd/dx') {
   return (
     <span key={index} className="inline-flex flex-col items-start">
       {/* d/dx and input inside parentheses */}
@@ -189,8 +223,7 @@ const CalculatorTabs: React.FC = () => {
       </div>
     </span>
   );
-}
-else if (part === 'd²/dx²') {
+    }else if (part === 'd²/dx²') {
   return (
     <span key={index} className="inline-flex flex-col items-start">
       {/* d²/dx² and input inside parentheses */}
@@ -212,7 +245,7 @@ else if (part === 'd²/dx²') {
       </div>
     </span>
   );
-}if (part === '∫' || part === '∬' || part === '∭') {
+    }if (part === '∫' || part === '∬' || part === '∭') {
   return (
     <span key={index} className="inline-flex items-center">
       {/* Integral symbol */}
@@ -229,13 +262,7 @@ else if (part === 'd²/dx²') {
       />
     </span>
   );
-}
-
-
-
-    
-    
-    else if (part === '∫□□') {
+    }else if (part === '∫□□') {
       return (
       <div className="flex flex-col items-center mb-4" key={index}>
           {/* Integral symbol with function input next to it */}
@@ -273,8 +300,7 @@ else if (part === 'd²/dx²') {
             Apply Limits
           </button> */}
         </div>)
-    }
-    else if (part === '∏') {
+    }else if (part === '∏') {
       return (
       <div className="flex flex-col items-center mb-4" key={index}>
           {/* Integral symbol with function input next to it */}
@@ -312,8 +338,7 @@ else if (part === 'd²/dx²') {
             Apply Limits
           </button> */}
         </div>)
-    }
-    else if (part === '∬□□') {
+    }else if (part === '∬□□') {
       // console.log("yessssssssss");
       // return (
       // <>
@@ -390,8 +415,7 @@ else if (part === 'd²/dx²') {
 </div>
 
       )
-    }
-    else if (part === '∭□□□') {
+    }else if (part === '∭□□□') {
   return (
     <div className="flex items-center" key={index}>
       {/* Triple Integral with Limits (Repeated Three Times) */}
@@ -434,9 +458,7 @@ else if (part === 'd²/dx²') {
       />
     </div>
   );
-}
-
-     else if (part === 'Σ') {
+    }else if (part === 'Σ') {
   return (
     <div className="flex flex-col items-center mb-4" key={index}>
       {/* Summation symbol with limits and input next to it */}
@@ -468,7 +490,7 @@ else if (part === 'd²/dx²') {
       </div>
     </div>
   );
-}else if (['sin', 'cos', 'tan', 'cot', 'csc', 'sec'].includes(part)) {
+    }else if (['sin', 'cos', 'tan', 'cot', 'csc', 'sec'].includes(part)) {
       return (
         <span key={index} className="inline-flex items-center">
           <span>{part}(</span>
@@ -484,6 +506,8 @@ else if (part === 'd²/dx²') {
           <span>)</span>
         </span>
       );
+    }else if (part === '□ / □') {
+      console.log("correct")
     }else if (part === '∂/∂x') {
       return (
         <span key={index} className="inline-flex items-center">

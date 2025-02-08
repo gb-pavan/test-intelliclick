@@ -2,6 +2,7 @@ import React from 'react';
 
 interface MathSymbolsProps {
     setSelectedInput: (value: string | ((prev: string) => string)) => void;
+
 }
 
 const mathSymbols = [

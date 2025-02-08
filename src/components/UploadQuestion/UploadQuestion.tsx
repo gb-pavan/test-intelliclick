@@ -1,0 +1,214 @@
+// import { useState,useRef } from "react";
+// import CalculatorTabs from "../Calculator/CalculatorTabs";
+
+// const QuestionForm = () => {
+//   const [question, setQuestion] = useState("");
+//   const [options, setOptions] = useState(["", "", "", ""]);
+//   const [loading, setLoading] = useState(false);
+//   const [activeInput, setActiveInput] = useState<"question" | number | null>(null);
+//   const [showCalculator, setShowCalculator] = useState(false);
+//   const [createInput,setCreateInput] = useState('');
+
+  
+//   const handleOptionChange = (index: number, value: string) => {
+//     setOptions((prev) => prev.map((opt, i) => (i === index ? value : opt)));
+//   };
+
+//   const handleSubmit = async () => {
+//     if (!question.trim() || options.some((opt) => !opt.trim())) {
+//       alert("Please fill in the question and all options.");
+//       return;
+//     }
+//     setLoading(true);
+//     try {
+//       const response = await fetch("/api/questions", {
+//         method: "POST",
+//         headers: { "Content-Type": "application/json" },
+//         body: JSON.stringify({ question, options }),
+//       });
+//       if (response.ok) {
+//         alert("Question submitted successfully!");
+//         setQuestion("");
+//         setOptions(["", "", "", ""]);
+//       } else {
+//         alert("Failed to submit the question.");
+//       }
+//     } catch (error) {
+//       console.error("Error submitting question:", error);
+//       alert("An error occurred. Please try again.");
+//     }
+//     setLoading(false);
+//   };
+
+//   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+//     setQuestion((prev) => prev + e.target.value);
+//   };
+
+//   const handleCalculatorInput = (value: string) => {
+//     // setQuestion((prev) => prev + value);
+//     setQuestion((prev) => {
+//     if (value === "BACKSPACE") {
+//       return prev.slice(0, -1); // Remove the last character
+//     }
+//     return prev + value;
+//   });
+//   };
+
+//   return (
+//     <div className="w-full p-4 bg-white shadow-lg rounded-lg mt-10">
+//       <div className="flex justify-center mt-4">
+//         <button
+//           onClick={() => setShowCalculator(!showCalculator)}
+//           className="bg-green-500 text-white p-2 rounded hover:bg-green-600 w-fit mx-auto"
+//         >
+//           {showCalculator ? "Hide Calculator" : "Show Calculator"}
+//         </button>
+//       </div>
+//       {showCalculator && (
+//         <div className="mt-4 p-4 border rounded shadow">
+//           <CalculatorTabs setCreateInput={setCreateInput} handleCalculatorInput={handleCalculatorInput} />
+//         </div>
+//       )}
+//       <h2 className="text-xl font-semibold mb-4">Create a Question</h2>
+//       <input
+//         type="text"
+//         placeholder="Enter your question"
+//         value={question}
+//         onChange={handleInputChange}
+//         className="w-full p-2 border rounded mb-4"
+//       />
+      
+//       {options.map((option, index) => (
+//         <input
+//           key={index}
+//           type="text"
+//           placeholder={`Option ${index + 1}`}
+//           value={option}
+//           onChange={(e) => {
+//             const updatedOptions = [...options];
+//             updatedOptions[index] = e.target.value;
+//             setOptions(updatedOptions);
+//           }}
+//           onFocus={() => setActiveInput(index)}
+//           className="w-full p-2 border rounded mb-2"
+//         />
+//       ))}
+//         <div className="flex justify-center mt-4">
+//             <button
+//                 onClick={handleSubmit}
+//                 disabled={loading}
+//                 className="bg-blue-500 text-white p-2 rounded mt-4 hover:bg-blue-600 disabled:bg-gray-400"
+//             >
+//                 {loading ? "Submitting..." : "Submit"}
+//             </button>
+//         </div>
+//     </div>
+//   );
+// };
+
+// export default QuestionForm;
+
+import { useState } from "react";
+import CalculatorTabs from "../Calculator/CalculatorTabs";
+
+const QuestionForm = () => {
+  const [question, setQuestion] = useState("");
+  const [options, setOptions] = useState(["", "", "", ""]);
+  const [loading, setLoading] = useState(false);
+  const [showCalculator, setShowCalculator] = useState(false);
+
+  const handleOptionChange = (index: number, value: string) => {
+    setOptions((prev) => prev.map((opt, i) => (i === index ? value : opt)));
+  };
+
+  const handleSubmit = async () => {
+    if (!question.trim() || options.some((opt) => !opt.trim())) {
+      alert("Please fill in the question and all options.");
+      return;
+    }
+    setLoading(true);
+    try {
+      const response = await fetch("/api/questions", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ question, options }),
+      });
+      if (response.ok) {
+        alert("Question submitted successfully!");
+        setQuestion("");
+        setOptions(["", "", "", ""]);
+      } else {
+        alert("Failed to submit the question.");
+      }
+    } catch (error) {
+      console.error("Error submitting question:", error);
+      alert("An error occurred. Please try again.");
+    }
+    setLoading(false);
+  };
+
+  // Handle keyboard input
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setQuestion(e.target.value);
+  };
+
+  // Handle calculator input
+  const handleCalculatorInput = (value: string) => {
+    setQuestion((prev) => {
+      if (value === "BACKSPACE") {
+        return prev.slice(0, -1); // Remove last character
+      }
+      return prev + value;
+    });
+  };
+
+  return (
+    <div className="w-full p-4 bg-white shadow-lg rounded-lg mt-10">
+      <div className="flex justify-center mt-4">
+        <button
+          onClick={() => setShowCalculator(!showCalculator)}
+          className="bg-green-500 text-white p-2 rounded hover:bg-green-600 w-fit mx-auto"
+        >
+          {showCalculator ? "Hide Calculator" : "Show Calculator"}
+        </button>
+      </div>
+      {showCalculator && (
+        <div className="mt-4 p-4 border rounded shadow">
+          <CalculatorTabs handleCalculatorInput={handleCalculatorInput} />
+        </div>
+      )}
+      <h2 className="text-xl font-semibold mb-4">Create a Question</h2>
+      <input
+        type="text"
+        placeholder="Enter your question"
+        value={question}
+        onChange={handleInputChange}
+        className="w-full p-2 border rounded mb-4"
+      />
+      
+      {options.map((option, index) => (
+        <input
+          key={index}
+          type="text"
+          placeholder={`Option ${index + 1}`}
+          value={option}
+          onChange={(e) => handleOptionChange(index, e.target.value)}
+          className="w-full p-2 border rounded mb-2"
+        />
+      ))}
+        <div className="flex justify-center mt-4">
+            <button
+                onClick={handleSubmit}
+                disabled={loading}
+                className="bg-blue-500 text-white p-2 rounded mt-4 hover:bg-blue-600 disabled:bg-gray-400"
+            >
+                {loading ? "Submitting..." : "Submit"}
+            </button>
+        </div>
+    </div>
+  );
+};
+
+export default QuestionForm;
+
+
