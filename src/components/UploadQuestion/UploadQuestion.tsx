@@ -380,54 +380,25 @@ const QuestionForm = () => {
     setOptions((prev) => prev.map((opt, i) => (i === index ? value : opt)));
   };
 
-  // const handleCalculatorInput = (value: string) => {
-  //   if (focusedInput === null) return;
-
-  //   const integralHTML = `<span class="flex items-center">
-  //     <span class="text-2xl">∫</span>
-  //     <input class="w-16 border text-center mx-1" placeholder="Function" type="text">
-  //     <span>dx</span>
-  //   </span>`;
-
-  //   if (focusedInput === "question") {
-  //     setQuestion((prev) => prev + value);
-  //   } else if (typeof focusedInput === "number") {
-  //     setOptions((prev) =>
-  //       prev.map((opt, i) => (i === focusedInput ? opt + value : opt))
-  //     );
-  //   }
-  // };
-
   const handleCalculatorInput = (value: string) => {
-  if (focusedInput === null) return;
+    if (focusedInput === null) return;
 
-  const selection = window.getSelection();
-  if (!selection || selection.rangeCount === 0) return;
+    const integralHTML = `<span class="flex items-center">
+      <span class="text-2xl">∫</span>
+      <input class="w-16 border text-center mx-1" placeholder="Function" type="text">
+      <span>dx</span>
+    </span>`;
 
-  const range = selection.getRangeAt(0);
+    if (focusedInput === "question") {
+      setQuestion((prev) => prev + value);
+    } else if (typeof focusedInput === "number") {
+      setOptions((prev) =>
+        prev.map((opt, i) => (i === focusedInput ? opt + value : opt))
+      );
+    }
+  };
 
-  // Wrap inserted content inside a span with class "math-span"
-  const span = document.createElement("span");
-  span.innerHTML = value;
-  span.classList.add("math-span"); // Use this class for easy deletion
-
-  range.deleteContents(); // Remove selected text if any
-  range.insertNode(span); // Insert new math content
-  range.collapse(false); // Move cursor after inserted content
-
-  // Ensure the cursor remains in the correct place
-  selection.removeAllRanges();
-  selection.addRange(range);
-
-  // Update the corresponding state
-  if (focusedInput === "question") {
-    setQuestion((prev) => prev + span.outerHTML);
-  } else if (typeof focusedInput === "number") {
-    setOptions((prev) =>
-      prev.map((opt, i) => (i === focusedInput ? opt + span.outerHTML : opt))
-    );
-  }
-};
+  
 
 // const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>, index?: number) => {
 //   if (e.key === "Backspace") {
