@@ -15,9 +15,10 @@ const math = create(all);
 
 interface CalculatorTabsProps {
   handleCalculatorInput: (value: string) => void;
+  insertElement: (html: string) => void;
 }
 
-const CalculatorTabs: React.FC<CalculatorTabsProps> = ({handleCalculatorInput}) => {
+const CalculatorTabs: React.FC<CalculatorTabsProps> = ({handleCalculatorInput,insertElement}) => {
   const type: 'double' | 'single' = 'double'; // Example value
 
   const [activeTab, setActiveTab] = useState<string>('Basic');
@@ -48,7 +49,7 @@ const CalculatorTabs: React.FC<CalculatorTabsProps> = ({handleCalculatorInput}) 
     { label: 'sin cos', content: <TrigonometricFunctions setSelectedInput={setSelectedInput} handleCalculatorInput={handleCalculatorInput}/> },
     { label: '≥ ÷ →', content: <MathRelations setSelectedInput={setSelectedInput} handleCalculatorInput={handleCalculatorInput}/> },
     { label: 'π√∇', content: <MathSubsets setSelectedInput={setSelectedInput} handleCalculatorInput={handleCalculatorInput}/> },
-    { label: 'Σ∫∏', content: <Integration setSelectedInput={setSelectedInput} handleCalculatorInput={handleCalculatorInput}/> },
+    { label: 'Σ∫∏', content: <Integration setSelectedInput={setSelectedInput} insertElement={insertElement}/> },
     {
   label: '(□ □\n □ □)',
   content: <Matrix />
