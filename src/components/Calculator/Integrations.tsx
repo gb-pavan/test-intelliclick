@@ -4,7 +4,8 @@ import { evaluate } from 'mathjs';
 interface IntegrationAndDerivativesProps {
   // setSelectedInput: (value: string) => void;
     setSelectedInput: (value: string | ((prev: string) => string)) => void;
-          handleCalculatorInput: (value: string) => void;
+      handleCalculatorInput: (value: React.ReactNode | number | string) => void;
+
 }
 
 const operations = [
@@ -32,9 +33,28 @@ const IntegrationAndDerivatives: React.FC<IntegrationAndDerivativesProps> = ({se
   const [result, setResult] = useState<string>('');
 
   const handleClick = (value: string) => {
+    if (value === '∫□□') {
+//       const integralElement = (
+//   <span className="flex items-center">
+//     <span className="text-2xl">∫</span>
+//     <input type="text" className="w-16 border text-center mx-1" placeholder="Function" />
+//     <span>dx</span>
+//   </span>
+// );
+
+// // When ∫□□ is clicked, send this React element
+// handleCalculatorInput(integralElement);
+const integralHTML = `<span class="flex items-center">
+    <span class="text-2xl">∫</span>
+    <input class="w-16 border text-center mx-1" placeholder="Function" type="text">
+    <span>dx</span>
+  </span>`;
+
+  handleCalculatorInput(integralHTML);
+
+    }
     setInput((prev) => prev + value);
     setSelectedInput((prev) => prev + value);
-    handleCalculatorInput(value);
   };
 
   const handleEvaluate = () => {
