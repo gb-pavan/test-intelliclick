@@ -33,34 +33,34 @@ const IntegrationAndDerivatives: React.FC<IntegrationAndDerivativesProps> = ({se
 
   const handleClick = (value: string) => {
     if (value === '∫□□') {
-//       const integralElement = (
-//   <span className="flex items-center">
-//     <span className="text-2xl">∫</span>
-//     <input type="text" className="w-16 border text-center mx-1" placeholder="Function" />
-//     <span>dx</span>
-//   </span>
-// );
-
-// // When ∫□□ is clicked, send this React element
-// handleCalculatorInput(integralElement);
-// const integralHTML = `<span class="flex items-center">
-//     <span class="text-2xl">∫</span>
-//     <input class="w-16 border text-center mx-1" placeholder="Function" type="text">
-//     <span>dx</span>
-//   </span>`;
-
-//   handleCalculatorInput(integralHTML);
-insertElement(
-      `<span style="display: inline-flex; align-items: center; margin: 0 5px;">
-        <span style="display: flex; flex-direction: column; align-items: center;">
-          <input type="text" placeholder="Upper" style="width: 40px; margin-bottom: 3px;" />
-          <span style="font-size: 20px; margin: 0 5px;">∫</span>
-          <input type="text" placeholder="Lower" style="width: 40px; margin-top: 3px;" />
-        </span>
-        <input type="text" placeholder="f(x)" style="width: 60px; margin-left: 5px;" autofocus />
-      </span>`
-    );
-
+      insertElement(
+        `<span style="display: inline-flex; align-items: center; margin: 0 5px;">
+          <span style="display: flex; flex-direction: column; align-items: center;">
+            <input type="text" placeholder="Upper" style="width: 40px; margin-bottom: 3px;" />
+            <span style="font-size: 20px; margin: 0 5px;">∫</span>
+            <input type="text" placeholder="Lower" style="width: 40px; margin-top: 3px;" />
+          </span>
+          <input type="text" placeholder="f(x)" style="width: 60px; margin-left: 5px;" autofocus />
+        </span>`
+      );
+    }
+    else if (value === '∬□□') {
+      insertElement(
+        `<span style="display: inline-flex; align-items: center; margin: 0 5px;">
+          <!-- Double Integral with Limits (Repeated Twice) -->
+          <span style="display: flex; flex-direction: column; align-items: center; margin: 0 5px;">
+            <input type="text" placeholder="Upper" style="width: 40px; margin-bottom: 3px; text-align: center;" />
+            <span style="font-size: 20px; margin: 0 5px;">∫</span>
+            <input type="text" placeholder="Lower" style="width: 40px; margin-top: 3px; text-align: center;" />
+          </span>
+          <span style="display: flex; flex-direction: column; align-items: center; margin: 0 5px;">
+            <input type="text" placeholder="Upper" style="width: 40px; margin-bottom: 3px; text-align: center;" />
+            <span style="font-size: 20px; margin: 0 5px;">∫</span>
+            <input type="text" placeholder="Lower" style="width: 40px; margin-top: 3px; text-align: center;" />
+          </span>
+          <!-- Input Field to the Right -->
+          <input type="text" placeholder="Function" style="width: 80px; margin-left: 5px; text-align: center;" />
+        </span>`)
     }
     setInput((prev) => prev + value);
     setSelectedInput((prev) => prev + value);
