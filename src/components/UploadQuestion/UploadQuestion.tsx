@@ -241,32 +241,70 @@ const QuestionForm = () => {
   const [content, setContent] = useState("");
   const editorRef = useRef<HTMLDivElement>(null);
 
+  // const insertElement = (html: string) => {
+  //   const selection = window.getSelection();
+  //   if (!selection || selection.rangeCount === 0) return;
+
+  //   const range = selection.getRangeAt(0);
+  //   const tempDiv = document.createElement("div");
+  //   tempDiv.innerHTML = html;
+
+  //   const fragment = document.createDocumentFragment();
+  //   while (tempDiv.firstChild) {
+  //     fragment.appendChild(tempDiv.firstChild);
+  //   }
+
+  //   range.deleteContents();
+  //   range.insertNode(fragment);
+
+  //   if (fragment.lastChild) {
+  //     range.setStartAfter(fragment.lastChild);
+  //     range.setEndAfter(fragment.lastChild);
+  //     selection.removeAllRanges();
+  //     selection.addRange(range);
+  //   }
+
+  //   // Update state to reflect the new content
+  //   setContent(editorRef.current?.innerText || "");
+  // };
+
   const insertElement = (html: string) => {
-    const selection = window.getSelection();
-    if (!selection || selection.rangeCount === 0) return;
+  const selection = window.getSelection();
+  if (!selection || selection.rangeCount === 0) return;
 
-    const range = selection.getRangeAt(0);
-    const tempDiv = document.createElement("div");
-    tempDiv.innerHTML = html;
+  const range = selection.getRangeAt(0);
+  const tempDiv = document.createElement("div");
+  tempDiv.innerHTML = html;
 
-    const fragment = document.createDocumentFragment();
-    while (tempDiv.firstChild) {
-      fragment.appendChild(tempDiv.firstChild);
-    }
+  const fragment = document.createDocumentFragment();
+  let lastNode: Node | null = null;
 
-    range.deleteContents();
-    range.insertNode(fragment);
+  while (tempDiv.firstChild) {
+    lastNode = fragment.appendChild(tempDiv.firstChild);
+  }
 
-    if (fragment.lastChild) {
-      range.setStartAfter(fragment.lastChild);
-      range.setEndAfter(fragment.lastChild);
-      selection.removeAllRanges();
-      selection.addRange(range);
-    }
+  range.deleteContents();
+  range.insertNode(fragment);
 
-    // Update state to reflect the new content
-    setContent(editorRef.current?.innerText || "");
-  };
+  // Ensure cursor appears after inserted content
+  if (lastNode) {
+    range.setStartAfter(lastNode);
+    range.setEndAfter(lastNode);
+    selection.removeAllRanges();
+    selection.addRange(range);
+  }
+
+  // Update state to reflect new content
+  setContent(editorRef.current?.innerHTML || "");
+  
+  // Focus back on the editor to keep the cursor active
+  if (editorRef.current) {
+    editorRef.current.focus();
+  }
+};
+
+
+
 
   const handleCalculatorInput = (value: string) => {
     console.log("calciInput");
