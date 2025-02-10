@@ -39,6 +39,7 @@ interface MathSymbolsProps {
     setSelectedInput: (value: string | ((prev: string) => string)) => void;
     handleCalculatorInput: (value: string) => void;
     insertElement: (html: string) => void;
+    restoreSelection:()=>void;
 }
 
 const mathSymbols = [
@@ -46,8 +47,9 @@ const mathSymbols = [
   ["(□)'", '∂/∂x', '∫□□', 'lim', 'Σ', 'sin', 'cos', 'tan', 'cot', 'csc', 'sec']
 ];
 
-const MathSymbolsGrid: React.FC<MathSymbolsProps> = ({ setSelectedInput, handleCalculatorInput, insertElement }) => {
+const MathSymbolsGrid: React.FC<MathSymbolsProps> = ({ setSelectedInput, handleCalculatorInput, insertElement,restoreSelection }) => {
   const handleClick = (value: string, event: React.MouseEvent) => {
+    restoreSelection()
     event.stopPropagation(); // Prevents bubbling issues
     insertElement(`<span>${value}</span>`);
   };

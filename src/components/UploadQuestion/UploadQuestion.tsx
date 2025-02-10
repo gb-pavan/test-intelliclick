@@ -240,8 +240,29 @@ const QuestionForm = () => {
   const [showCalculator, setShowCalculator] = useState(false);
   const [content, setContent] = useState("");
   const editorRef = useRef<HTMLDivElement>(null);
+  const selectionRef = useRef<Range | null>(null);
+
+  // Save cursor position
+  const saveSelection = () => {
+    const selection = window.getSelection();
+    if (selection && selection.rangeCount > 0) {
+      selectionRef.current = selection.getRangeAt(0);
+    }
+  };
+
+  // Restore cursor position
+  const restoreSelection = () => {
+    const selection = window.getSelection();
+    if (selection && selectionRef.current) {
+      selection.removeAllRanges();
+      selection.addRange(selectionRef.current);
+    }
+  };
 
   const insertElement = (html: string) => {
+    if (!editorRef.current) return;
+
+    restoreSelection(); //
   const selection = window.getSelection();
   if (!selection || selection.rangeCount === 0) return;
 
@@ -303,7 +324,7 @@ const QuestionForm = () => {
       </div>
       {showCalculator && (
         <div className="mt-4 p-4 border rounded shadow">
-          <CalculatorTabs handleCalculatorInput={handleCalculatorInput} insertElement={insertElement} />
+          <CalculatorTabs handleCalculatorInput={handleCalculatorInput} insertElement={insertElement} restoreSelection={restoreSelection} />
         </div>
       )}
       <h2 className="text-xl font-semibold mb-4">Create a Question</h2>
@@ -313,6 +334,8 @@ const QuestionForm = () => {
         suppressContentEditableWarning
         onInput={handleInput}
         onKeyDown={handleKeyDown}
+        onMouseUp={saveSelection} // Save cursor position when clicking inside editor
+        onKeyUp={saveSelection}   // Save cursor when typing
         style={{
           border: "1px solid black",
           minHeight: "50px",

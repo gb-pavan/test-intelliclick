@@ -16,9 +16,10 @@ const math = create(all);
 interface CalculatorTabsProps {
   handleCalculatorInput: (value: string) => void;
   insertElement: (html: string) => void;
+  restoreSelection:() =>void;
 }
 
-const CalculatorTabs: React.FC<CalculatorTabsProps> = ({handleCalculatorInput,insertElement}) => {
+const CalculatorTabs: React.FC<CalculatorTabsProps> = ({handleCalculatorInput,insertElement,restoreSelection}) => {
   const type: 'double' | 'single' = 'double'; // Example value
 
   const [activeTab, setActiveTab] = useState<string>('Basic');
@@ -43,7 +44,7 @@ const CalculatorTabs: React.FC<CalculatorTabsProps> = ({handleCalculatorInput,in
   const [selectedIntegral, setSelectedIntegral] = useState<boolean>(false);
 
   const tabs = [
-    { label: 'Basic', content: <MathSymbolsGrid setSelectedInput={setSelectedInput} handleCalculatorInput={handleCalculatorInput} insertElement={insertElement}/> },
+    { label: 'Basic', content: <MathSymbolsGrid setSelectedInput={setSelectedInput} handleCalculatorInput={handleCalculatorInput} insertElement={insertElement} restoreSelection={restoreSelection}/> },
     { label: 'αβγ', content: <GreekSymbolsGrid setSelectedInput={setSelectedInput} handleCalculatorInput={handleCalculatorInput} /> },
     { label: 'ABΓ', content: <GreekAlphabet setSelectedInput={setSelectedInput} handleCalculatorInput={handleCalculatorInput}/> },
     { label: 'sin cos', content: <TrigonometricFunctions setSelectedInput={setSelectedInput} handleCalculatorInput={handleCalculatorInput}/> },
