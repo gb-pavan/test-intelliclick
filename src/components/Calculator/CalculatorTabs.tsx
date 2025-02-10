@@ -81,14 +81,9 @@ const CalculatorTabs: React.FC<CalculatorTabsProps> = ({handleCalculatorInput,in
   <input
     type="text"
     autoFocus
+    placeholder="x"
     className="text-xs text-center border-b border-gray-400 focus:outline-none"
-    style={{
-      fontSize: "0.8em",
-      width: "1ch", // Initially 1 character wide
-      minWidth: "1ch", // Ensures visibility when empty
-      backgroundColor: "#f3f4f6", // Light gray background
-      caretColor: "black", // Ensures blinking cursor visibility
-    }}
+    style="width: 20px; margin-top: 3px;"
   />
   <sup>²</sup>
 </span>
