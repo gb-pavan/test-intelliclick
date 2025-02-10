@@ -3,6 +3,8 @@ import React from 'react';
 interface GreekSymbolsGridProps {
     setSelectedInput: (value: string | ((prev: string) => string)) => void;
       handleCalculatorInput: (value: string) => void;
+      insertElement: (html: string) => void;
+    restoreSelection:()=>void;
 }
 
 const greekSymbols = [
@@ -10,13 +12,15 @@ const greekSymbols = [
   ['ν', 'ξ', 'π', 'ρ', 'σ', 'τ', 'υ', 'φ', 'χ', 'ψ', 'ω']
 ];
 
-const GreekSymbolsGrid: React.FC<GreekSymbolsGridProps> = ({setSelectedInput,handleCalculatorInput}) => {
+const GreekSymbolsGrid: React.FC<GreekSymbolsGridProps> = ({setSelectedInput,handleCalculatorInput,insertElement,restoreSelection}) => {
 
   
   const handleClick = (value: string) => {
     // setInput((prev) => prev + value);
     setSelectedInput((prev) => prev + value);
     handleCalculatorInput(value);
+    restoreSelection()
+    insertElement(`<span>${value}</span>`);
   };
   return (
     <div className="bg-white shadow-md rounded-md w-full mx-auto">

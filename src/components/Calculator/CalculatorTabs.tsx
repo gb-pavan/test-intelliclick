@@ -45,12 +45,12 @@ const CalculatorTabs: React.FC<CalculatorTabsProps> = ({handleCalculatorInput,in
 
   const tabs = [
     { label: 'Basic', content: <MathSymbolsGrid setSelectedInput={setSelectedInput} handleCalculatorInput={handleCalculatorInput} insertElement={insertElement} restoreSelection={restoreSelection}/> },
-    { label: 'αβγ', content: <GreekSymbolsGrid setSelectedInput={setSelectedInput} handleCalculatorInput={handleCalculatorInput} /> },
-    { label: 'ABΓ', content: <GreekAlphabet setSelectedInput={setSelectedInput} handleCalculatorInput={handleCalculatorInput}/> },
-    { label: 'sin cos', content: <TrigonometricFunctions setSelectedInput={setSelectedInput} handleCalculatorInput={handleCalculatorInput}/> },
-    { label: '≥ ÷ →', content: <MathRelations setSelectedInput={setSelectedInput} handleCalculatorInput={handleCalculatorInput}/> },
-    { label: 'π√∇', content: <MathSubsets setSelectedInput={setSelectedInput} handleCalculatorInput={handleCalculatorInput}/> },
-    { label: 'Σ∫∏', content: <Integration setSelectedInput={setSelectedInput} insertElement={insertElement}/> },
+    { label: 'αβγ', content: <GreekSymbolsGrid setSelectedInput={setSelectedInput} handleCalculatorInput={handleCalculatorInput} insertElement={insertElement} restoreSelection={restoreSelection} /> },
+    { label: 'ABΓ', content: <GreekAlphabet setSelectedInput={setSelectedInput} handleCalculatorInput={handleCalculatorInput} insertElement={insertElement} restoreSelection={restoreSelection}/> },
+    { label: 'sin cos', content: <TrigonometricFunctions setSelectedInput={setSelectedInput} handleCalculatorInput={handleCalculatorInput} insertElement={insertElement} restoreSelection={restoreSelection}/> },
+    { label: '≥ ÷ →', content: <MathRelations setSelectedInput={setSelectedInput} handleCalculatorInput={handleCalculatorInput} insertElement={insertElement} restoreSelection={restoreSelection}/> },
+    { label: 'π√∇', content: <MathSubsets setSelectedInput={setSelectedInput} handleCalculatorInput={handleCalculatorInput} insertElement={insertElement} restoreSelection={restoreSelection}/> },
+    { label: 'Σ∫∏', content: <Integration setSelectedInput={setSelectedInput} insertElement={insertElement} /> },
     {
   label: '(□ □\n □ □)',
   content: <Matrix />
