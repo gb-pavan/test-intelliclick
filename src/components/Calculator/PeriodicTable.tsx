@@ -45,9 +45,16 @@
 
 // export default PeriodicTable;
 
+interface PeriodicTableProps {
+    
+          insertElement: (html: string) => void;
+    restoreSelection:()=>void;
+
+}
+
 import React from 'react';
 
-const PeriodicTable: React.FC = () => {
+const PeriodicTable: React.FC<PeriodicTableProps> = ({insertElement,restoreSelection}) => {
   const elements = [
     // First row
     ['H', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'He'],
@@ -69,6 +76,11 @@ const PeriodicTable: React.FC = () => {
     ['', '', 'Ac', 'Th', 'Pa', 'U', 'Np', 'Pu', 'Am', 'Cm', 'Bk', 'Cf', 'Es', 'Fm', 'Md', 'No', 'Lr', ''],
   ];
 
+  const handleClick = (value: string) => {
+    restoreSelection()
+    insertElement(`<span>${value}</span>`);
+  };
+
   return (
     <div className="flex justify-center items-center bg-gray-100 p-4">
       <div className="grid gap-1" style={{ gridTemplateColumns: 'repeat(18, minmax(40px, 1fr))' }}>
@@ -76,6 +88,7 @@ const PeriodicTable: React.FC = () => {
           row.map((element, colIndex) => (
             <div
               key={`${rowIndex}-${colIndex}`}
+              onClick={()=>handleClick(element)}
               className={`
                 ${element ? 'bg-white text-center font-medium shadow-md' : 'invisible'}
                 p-2 border rounded-md text-sm hover:bg-gray-200 transition-all

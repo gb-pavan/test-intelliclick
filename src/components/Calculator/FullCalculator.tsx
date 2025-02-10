@@ -6,9 +6,11 @@ const math = create(all);
 interface FullCalculatorProps {
   // setSelectedInput: (value: string) => void;
     setSelectedInput: (value: string | ((prev: string) => string)) => void;
+    insertElement: (html: string) => void;
+    restoreSelection:()=>void;
 }
 
-const FullCalculator: React.FC<FullCalculatorProps> = ({setSelectedInput}) => {
+const FullCalculator: React.FC<FullCalculatorProps> = ({setSelectedInput,insertElement,restoreSelection}) => {
   const [input, setInput] = useState<string>('');
   const [isRadians, setIsRadians] = useState<boolean>(true);
   const [isLogMode, setIsLogMode] = useState<boolean>(false);
@@ -82,6 +84,8 @@ const FullCalculator: React.FC<FullCalculatorProps> = ({setSelectedInput}) => {
   else {
     setInput(input + value);
     setSelectedInput(prev => prev + value);
+    restoreSelection()
+    insertElement(`<span>${value}</span>`);
   }
 };
 

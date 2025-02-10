@@ -55,8 +55,8 @@ const CalculatorTabs: React.FC<CalculatorTabsProps> = ({handleCalculatorInput,in
   label: '(□ □\n □ □)',
   content: <Matrix />
 },
-    { label: 'H₂O', content: <PeriodicTable /> },
-    { label: 'Calculator', content: <FullCalculator setSelectedInput={setSelectedInput} /> },
+    { label: 'H₂O', content: <PeriodicTable insertElement={insertElement} restoreSelection={restoreSelection} /> },
+    { label: 'Calculator', content: <FullCalculator setSelectedInput={setSelectedInput} insertElement={insertElement} restoreSelection={restoreSelection} /> },
   ];
 
   const operations = [
@@ -75,6 +75,28 @@ const CalculatorTabs: React.FC<CalculatorTabsProps> = ({handleCalculatorInput,in
 
   const handleClick = (value: string) => {
     setSelectedInput(prev => prev + value);
+    restoreSelection();
+    if (value === '□²'){
+      insertElement(`<span key={index} className="relative inline-flex items-center">
+  <input
+    type="text"
+    autoFocus
+    className="text-xs text-center border-b border-gray-400 focus:outline-none"
+    style={{
+      fontSize: "0.8em",
+      width: "1ch", // Initially 1 character wide
+      minWidth: "1ch", // Ensures visibility when empty
+      backgroundColor: "#f3f4f6", // Light gray background
+      caretColor: "black", // Ensures blinking cursor visibility
+    }}
+  />
+  <sup>²</sup>
+</span>
+`
+);
+    }
+    else{
+    insertElement(`<span>${value}</span>`);}
   };
 
   const handleInputChange = (index: number, value: string) => {
