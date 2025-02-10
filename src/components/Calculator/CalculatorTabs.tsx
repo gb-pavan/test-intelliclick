@@ -43,7 +43,7 @@ const CalculatorTabs: React.FC<CalculatorTabsProps> = ({handleCalculatorInput,in
   const [selectedIntegral, setSelectedIntegral] = useState<boolean>(false);
 
   const tabs = [
-    { label: 'Basic', content: <MathSymbolsGrid setSelectedInput={setSelectedInput} handleCalculatorInput={handleCalculatorInput}/> },
+    { label: 'Basic', content: <MathSymbolsGrid setSelectedInput={setSelectedInput} handleCalculatorInput={handleCalculatorInput} insertElement={insertElement}/> },
     { label: 'αβγ', content: <GreekSymbolsGrid setSelectedInput={setSelectedInput} handleCalculatorInput={handleCalculatorInput} /> },
     { label: 'ABΓ', content: <GreekAlphabet setSelectedInput={setSelectedInput} handleCalculatorInput={handleCalculatorInput}/> },
     { label: 'sin cos', content: <TrigonometricFunctions setSelectedInput={setSelectedInput} handleCalculatorInput={handleCalculatorInput}/> },
@@ -418,46 +418,49 @@ const CalculatorTabs: React.FC<CalculatorTabsProps> = ({handleCalculatorInput,in
       )
     }else if (part === '∭□□□') {
   return (
-    <div className="flex items-center" key={index}>
-      {/* Triple Integral with Limits (Repeated Three Times) */}
-      {[...Array(3)].map((_, index) => (
-        <div key={index} className="relative flex flex-col items-center mx-2">
-          {/* Upper Limit */}
-          <input
-            type="text"
-            value={limits[
-              index === 0 ? 'outerUpper' : index === 1 ? 'middleUpper' : 'innerUpper'
-            ]}
-            onChange={(e) =>
-              handleLimitChange(e, index === 0 ? 'outerUpper' : index === 1 ? 'middleUpper' : 'innerUpper')
-            }
-            className="w-8 p-1 border rounded-md text-center"
-            placeholder="Upper"
-          />
-          {/* Integral Symbol */}
-          <span className="text-2xl">∫</span>
-          {/* Lower Limit */}
-          <input
-            type="text"
-            value={limits[
-              index === 0 ? 'outerLower' : index === 1 ? 'middleLower' : 'innerLower'
-            ]}
-            onChange={(e) =>
-              handleLimitChange(e, index === 0 ? 'outerLower' : index === 1 ? 'middleLower' : 'innerLower')
-            }
-            className="w-8 p-1 border rounded-md text-center"
-            placeholder="Lower"
-          />
-        </div>
-      ))}
+    <span className="inline-flex items-center mx-2" key={index}>
+  {/* Triple Integral with Limits (Repeated Three Times) */}
+  <span className="flex">
+    {[...Array(3)].map((_, subIndex) => (
+      <span key={subIndex} className="flex flex-col items-center mx-2">
+        {/* Upper Limit */}
+        <input
+          type="text"
+          value={limits[
+            subIndex === 0 ? 'outerUpper' : subIndex === 1 ? 'middleUpper' : 'innerUpper'
+          ]}
+          onChange={(e) =>
+            handleLimitChange(e, subIndex === 0 ? 'outerUpper' : subIndex === 1 ? 'middleUpper' : 'innerUpper')
+          }
+          className="w-10 mb-1 text-center border rounded"
+          placeholder="Upper"
+        />
+        {/* Integral Symbol */}
+        <span className="text-2xl">∫</span>
+        {/* Lower Limit */}
+        <input
+          type="text"
+          value={limits[
+            subIndex === 0 ? 'outerLower' : subIndex === 1 ? 'middleLower' : 'innerLower'
+          ]}
+          onChange={(e) =>
+            handleLimitChange(e, subIndex === 0 ? 'outerLower' : subIndex === 1 ? 'middleLower' : 'innerLower')
+          }
+          className="w-10 mt-1 text-center border rounded"
+          placeholder="Lower"
+        />
+      </span>
+    ))}
+  </span>
+  {/* Input Field to the Right */}
+  <input
+    type="text"
+    className="w-24 ml-2 text-center border rounded"
+    placeholder="Function"
+  />
+</span>
 
-      {/* Input Field to the Right */}
-      <input
-        type="text"
-        className="w-32 p-1 border rounded-md text-center"
-        placeholder="Function"
-      />
-    </div>
+
   );
     }else if (part === 'Σ') {
   return (

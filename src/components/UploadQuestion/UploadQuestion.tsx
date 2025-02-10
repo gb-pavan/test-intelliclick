@@ -241,33 +241,6 @@ const QuestionForm = () => {
   const [content, setContent] = useState("");
   const editorRef = useRef<HTMLDivElement>(null);
 
-  // const insertElement = (html: string) => {
-  //   const selection = window.getSelection();
-  //   if (!selection || selection.rangeCount === 0) return;
-
-  //   const range = selection.getRangeAt(0);
-  //   const tempDiv = document.createElement("div");
-  //   tempDiv.innerHTML = html;
-
-  //   const fragment = document.createDocumentFragment();
-  //   while (tempDiv.firstChild) {
-  //     fragment.appendChild(tempDiv.firstChild);
-  //   }
-
-  //   range.deleteContents();
-  //   range.insertNode(fragment);
-
-  //   if (fragment.lastChild) {
-  //     range.setStartAfter(fragment.lastChild);
-  //     range.setEndAfter(fragment.lastChild);
-  //     selection.removeAllRanges();
-  //     selection.addRange(range);
-  //   }
-
-  //   // Update state to reflect the new content
-  //   setContent(editorRef.current?.innerText || "");
-  // };
-
   const insertElement = (html: string) => {
   const selection = window.getSelection();
   if (!selection || selection.rangeCount === 0) return;
@@ -302,8 +275,6 @@ const QuestionForm = () => {
     editorRef.current.focus();
   }
 };
-
-
 
 
   const handleCalculatorInput = (value: string) => {
