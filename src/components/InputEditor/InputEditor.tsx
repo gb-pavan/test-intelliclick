@@ -398,6 +398,7 @@ const InputEditor: React.FC<InputEditorProps> = ({ value, onChange, isActive, on
   const updateCursorPosition = (index: number) => {
     setCursorIndex(index);
   };
+  console.log("items",items);
 
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent<HTMLDivElement>) => {
@@ -464,6 +465,7 @@ const InputEditor: React.FC<InputEditorProps> = ({ value, onChange, isActive, on
         ref={containerRef}
         contentEditable
         suppressContentEditableWarning
+        onClick={() => onFocus()}
         style={{
           display: "inline-flex",
           alignItems: "center",

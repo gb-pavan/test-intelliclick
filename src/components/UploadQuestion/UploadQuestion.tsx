@@ -125,6 +125,7 @@
 import React, { useState } from "react";
 import dynamic from "next/dynamic";
 import InputEditor from "../InputEditor/InputEditor";
+import CalculatorTabs from "../Calculator/CalculatorTabs";
 
 interface MathJaxItem {
   type: "math" | "text";
@@ -135,6 +136,8 @@ const MathJax = dynamic(() => import("better-react-mathjax").then((mod) => mod.M
 
 const QuestionForm: React.FC = () => {
   const [activeField, setActiveField] = useState<string | null>(null);
+    const [showCalculator, setShowCalculator] = useState(false);
+
 
   const [question, setQuestion] = useState<MathJaxItem[]>([
     { type: "text", value: "paven" },
@@ -161,6 +164,25 @@ const QuestionForm: React.FC = () => {
     { type: "text", value: "example" },
   ]);
 
+  const handleCalculatorInput = (item:MathJaxItem) => {
+    switch (activeField) {
+      case 'option0':
+        setOption1(prev => [...prev, item]);
+        break;
+      case 'option1':
+        setOption2(prev => [...prev, item]);
+        break;
+      case 'option2':
+        setOption3(prev => [...prev, item]);
+        break;
+      case 'option3':
+        setOption4(prev => [...prev, item]);
+        break;
+      default:
+        setQuestion(prev => [...prev,item]);
+    }
+  }
+
   const handleQuestionChange = (value: MathJaxItem[]) => {
     setQuestion(value);
   };
@@ -184,8 +206,25 @@ const QuestionForm: React.FC = () => {
     }
   };
 
+  console.log("active",activeField);
+  console.log("ques",question);
   return (
     <div className="p-4 w-full h-screen flex flex-col space-y-4">
+       <div className="flex justify-center mt-4">
+        <button
+          onClick={() => setShowCalculator(!showCalculator)}
+          className="bg-green-500 text-white p-2 rounded hover:bg-green-600"
+        >
+          {showCalculator ? "Hide Calculator" : "Show Calculator"}
+        </button>
+      </div>
+      
+      {/* Calculator Display */}
+      {showCalculator && (
+        <div className="mt-4 p-4 border rounded shadow">
+          <CalculatorTabs handleCalculatorInput={handleCalculatorInput} />
+        </div>
+      )}
       <h2 className="text-lg font-semibold">Create Question</h2>
       
       {/* Question Editor */}
@@ -204,8 +243,8 @@ const QuestionForm: React.FC = () => {
             key={index}
             value={option}
             onChange={(value) => handleOptionChange(index, value)}
-            isActive={activeField === `option-${index}`}
-            onFocus={() => setActiveField(`option-${index}`)}
+            isActive={activeField === `option${index}`}
+            onFocus={() => setActiveField(`option${index}`)}
             className="w-full flex-grow"
           />
         ))}

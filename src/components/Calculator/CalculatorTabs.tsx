@@ -13,8 +13,13 @@ import MathSubsets from './MathSubsets';
 
 const math = create(all);
 
+interface MathJaxItem {
+  type: "math" | "text";
+  value: string;
+}
+
 interface CalculatorTabsProps {
-  // handleCalculatorInput: (value: string) => void;
+  handleCalculatorInput: (item: MathJaxItem)=> void
   // insertElement: (html: string) => void;
   restoreSelection:() =>void;
 }

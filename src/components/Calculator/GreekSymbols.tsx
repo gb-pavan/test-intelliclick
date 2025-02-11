@@ -1,8 +1,13 @@
 import React from 'react';
 
+interface MathJaxItem {
+  type: "math" | "text";
+  value: string;
+}
+
 interface GreekSymbolsGridProps {
     setSelectedInput: (value: string | ((prev: string) => string)) => void;
-      handleCalculatorInput: (value: string) => void;
+      handleCalculatorInput: (item: MathJaxItem)=> void
       insertElement: (html: string) => void;
     restoreSelection:()=>void;
 }
@@ -18,9 +23,9 @@ const GreekSymbolsGrid: React.FC<GreekSymbolsGridProps> = ({setSelectedInput,han
   const handleClick = (value: string) => {
     // setInput((prev) => prev + value);
     setSelectedInput((prev) => prev + value);
-    handleCalculatorInput(value);
-    restoreSelection()
-    insertElement(`<span>${value}</span>`);
+    handleCalculatorInput({type:'text',value:value});
+    // restoreSelection()
+    // insertElement(`<span>${value}</span>`);
   };
   return (
     <div className="bg-white shadow-md rounded-md w-full mx-auto">
