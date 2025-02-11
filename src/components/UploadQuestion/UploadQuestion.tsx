@@ -1,373 +1,220 @@
-// import React, { useState, useCallback, useEffect, useRef } from 'react';
-// import { MathJax, MathJaxContext } from 'better-react-mathjax';
+// import React, { useState } from "react";
+// import dynamic from "next/dynamic";
+// import InputEditor from "../InputEditor/InputEditor";
 
-// interface MathJaxItem {
-//   type: 'math' | 'text';
-//   value: string;
-// }
+// const MathJax = dynamic(() => import("better-react-mathjax").then((mod) => mod.MathJax), { ssr: false });
 
 // const QuestionForm: React.FC = () => {
-//   const [items, setItems] = useState<MathJaxItem[]>([
-//   { type: 'text', value: 'paven' },
-//   { type: 'text', value: 'hello' },
-//   { type: 'math', value: '\\int x^2 dx' },
-//   { type: 'text', value: 'test' },
-//   { type: 'math', value: '\\iint f(x, y) dxdy' },
-//   { type: 'text', value: 'sample' },
-//   { type: 'math', value: '\\int_0^1 e^x dx' },
-//   { type: 'text', value: 'world' },
-//   { type: 'math', value: '\\iint_0^1 xy dxdy' },
-//   { type: 'text', value: 'example' }
-// ]
-// );
-//   const [inputText, setInputText] = useState('');
-//   const [mathJaxLoaded, setMathJaxLoaded] = useState(false);
-//   const mathJaxRefs = useRef<HTMLSpanElement[]>([]); // Ref for each MathJax element
-//   const observers = useRef<MutationObserver[]>([]); // Ref for MutationObservers
-//     const containerRef = useRef<HTMLDivElement>(null);
+//   const [activeField, setActiveField] = useState<string | null>(null);
+//   const [content, setContent] = useState({
+//     question: "",
+//     options: ["", "", "", ""]
+//   });
 
-
-//   const mathJaxRegex = /^(\\[a-zA-Z]+(?:\{.*\}|\[.*\])?(?:[\^_].*?)?|[0-9]+|[+\-*/=><!]|[,.;:])$/;
-
-//   useEffect(() => {
-//   if (mathJaxLoaded && typeof window !== "undefined" && (window as any).MathJax) {
-//     (window as any).MathJax.Hub?.Queue(["Typeset", (window as any).MathJax.Hub])
-
-//       .then(() => console.log("MathJax typeset completed"))
-//       .catch((err: any) => console.error("MathJax rendering error:", err));
-//   }
-// }, [mathJaxLoaded, items]); // Re-run when items change
-
-
-//   const processInput = useCallback(() => {
-//     // ... (same as before)
-//   }, [inputText]);
-
-//   useEffect(() => {
-//     processInput();
-//   }, [inputText, processInput]);
-
-//   // ... (handleInputChange and handleKeyDown - same as before)
-
-//   useEffect(() => {
-//     if (typeof window !== 'undefined' && (window as any).MathJax) {
-//       setMathJaxLoaded(true);
-//     }
-//   }, []);
-
-//   useEffect(() => {
-//     if (mathJaxLoaded) {
-//       mathJaxRefs.current.forEach((span, index) => {
-//         if (span) {
-//           const observer = new MutationObserver(() => {
-//             if (span.innerHTML !== "") {
-//               observer.disconnect();
-//             }
-//           });
-
-//           observers.current[index] = observer; // Store observer in array
-//           observer.observe(span, { childList: true, subtree: true });
-//         }
-//       });
-//     }
-
-//     return () => {
-//       observers.current.forEach(observer => {
-//         if (observer) {
-//           observer.disconnect();
-//         }
-//       });
-//       observers.current = []; // Clear the observers array
-//       mathJaxRefs.current = []; // Clear the refs array
-//     };
-//   }, [mathJaxLoaded, items]);
-
-//   const handleInput = useCallback(() => {
-//     if (!containerRef.current) return;
-//     const textContent = containerRef.current.innerText.trim();
-//     const newItems: MathJaxItem[] = textContent.split(' ').map((word) => {
-//       return /\\[a-zA-Z]+/.test(word) ? { type: 'math', value: word } : { type: 'text', value: word };
-//     });
-//     setItems(newItems);
-//   }, []);
+//   const handleChange = (key: "question" | "options", index: number, value: string) => {
+//     setContent((prev) => ({
+//       ...prev,
+//       [key]: key === "options" ? prev.options.map((opt, i) => (i === index ? value : opt)) : value,
+//     }));
+//   };
 
 //   return (
-//     <MathJaxContext config={{ 
-//   tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
-//   options: { skipHtmlTags: ["script", "noscript", "style", "textarea", "pre", "code"] }
-// }}>
-      
-//       <div style={{ display: 'inline-flex', alignItems: 'center', flexWrap: 'wrap',border: '1px solid #ccc', 
-//           padding: '8px' }} ref={containerRef}
-//         contentEditable
-//         suppressContentEditableWarning
-//         onInput={handleInput}>
-        
-//           {items.map((item, index) => (
-//             <React.Fragment key={index}>
-//               {item.type === 'math' && mathJaxLoaded ? (
-//                 <span ref={el => { if (el) mathJaxRefs.current[index] = el; }}>
-
-//                   <MathJax key={item.value}>{`\\(${item.value}\\)`}</MathJax>
-//                 </span>
-//               ) : item.type === 'math' && !mathJaxLoaded ? (
-//                 <span>{item.value}</span>
-//               ) : (
-//                 <span>{item.value} </span>
-//               )}
-//             </React.Fragment>
-//           ))}
-        
+//     <div className="p-4 w-full max-w-2xl mx-auto space-y-4">
+//       <h2 className="text-lg font-semibold">Create Question</h2>
+//       <InputEditor
+//         value={content.question}
+//         onChange={(value) => handleChange("question", -1, value)}
+//         isActive={activeField === "question"}
+//         onFocus={() => setActiveField("question")}
+//       />
+//       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+//         {content.options.map((option, index) => (
+//           <InputEditor
+//             key={index}
+//             value={option}
+//             onChange={(value) => handleChange("options", index, value)}
+//             isActive={activeField === `option-${index}`}
+//             onFocus={() => setActiveField(`option-${index}`)}
+//           />
+//         ))}
 //       </div>
-//     </MathJaxContext>
+//     </div>
 //   );
 // };
 
 // export default QuestionForm;
 
-// import React, { useState, useEffect, useRef, useCallback } from "react";
-// import { MathJax, MathJaxContext } from "better-react-mathjax";
+// import React, { useState } from "react";
+// import dynamic from "next/dynamic";
+// import InputEditor from "../InputEditor/InputEditor";
 
 // interface MathJaxItem {
 //   type: "math" | "text";
 //   value: string;
 // }
 
+// const MathJax = dynamic(() => import("better-react-mathjax").then((mod) => mod.MathJax), { ssr: false });
+
 // const QuestionForm: React.FC = () => {
-//   const [items, setItems] = useState<MathJaxItem[]>([
-//     { type: "text", value: "paven" },
-//     { type: "text", value: "hello" },
-//     { type: "math", value: "\\int x^2 dx" },
-//     { type: "text", value: "test" },
-//     { type: "math", value: "\\iint f(x, y) dxdy" },
-//     { type: "text", value: "sample" },
-//     { type: "math", value: "\\int_0^1 e^x dx" },
-//     { type: "text", value: "world" },
-//     { type: "math", value: "\\iint_0^1 xy dxdy" },
-//     { type: "text", value: "example" },
-//   ]);
-  
-//   const containerRef = useRef<HTMLDivElement>(null);
-//   const [cursorIndex, setCursorIndex] = useState<number>(0);
+//   const [activeField, setActiveField] = useState<string | null>(null);
+//   const [content, setContent] = useState({
+//     question: "",
+//     options: ["", "", "", ""]
+//   });
+//   const [question, setQuestion] = useState<MathJaxItem[]>([
+//   { type: "text", value: "paven" },
+//   { type: "text", value: "hello" },
+//   { type: "math", value: "\\int x^2 dx" },
+// ]);
 
-//   const updateCursorPosition = useCallback((index: number) => {
-//     setCursorIndex(index);
-//   }, []);
+// const [option1, setOption1] = useState<MathJaxItem[]>([
+//   { type: "text", value: "test" },
+//   { type: "math", value: "\\iint f(x, y) dxdy" },
+// ]);
 
-//   const handleKeyDown = useCallback(
-//     (event: React.KeyboardEvent<HTMLDivElement>) => {
-//       if (!containerRef.current) return;
+// const [option2, setOption2] = useState<MathJaxItem[]>([
+//   { type: "text", value: "sample" },
+//   { type: "math", value: "\\int_0^1 e^x dx" },
+// ]);
 
-//       if (event.key === "ArrowLeft") {
-//         event.preventDefault();
-//         if (cursorIndex > 0) {
-//           updateCursorPosition(cursorIndex - 1);
-//         }
-//       }
+// const [option3, setOption3] = useState<MathJaxItem[]>([
+//   { type: "text", value: "world" },
+//   { type: "math", value: "\\iint_0^1 xy dxdy" },
+// ]);
 
-//       if (event.key === "ArrowRight") {
-//         event.preventDefault();
-//         if (cursorIndex < items.length - 1) {
-//           updateCursorPosition(cursorIndex + 1);
-//         }
-//       }
+// const [option4, setOption4] = useState<MathJaxItem[]>([
+//   { type: "text", value: "example" },
+// ]);
 
-//       if (event.key === "Backspace") {
-//         event.preventDefault();
-//         if (cursorIndex === 0) return;
 
-//         const newItems = [...items];
-//         const currentItem = newItems[cursorIndex];
-
-//         if (currentItem.type === "math") {
-//           newItems.splice(cursorIndex, 1);
-//           updateCursorPosition(Math.max(0, cursorIndex - 1));
-//         } else if (currentItem.type === "text" && currentItem.value.length > 1) {
-//           newItems[cursorIndex] = { type: "text", value: currentItem.value.slice(0, -1) };
-//         } else {
-//           newItems.splice(cursorIndex, 1);
-//           updateCursorPosition(Math.max(0, cursorIndex - 1));
-//         }
-
-//         setItems(newItems);
-//       }
-//     },
-//     [items, cursorIndex, updateCursorPosition]
-//   );
+//   const handleChange = (key: "question" | "options", index: number, value: string) => {
+//     setContent((prev) => ({
+//       ...prev,
+//       [key]: key === "options" ? prev.options.map((opt, i) => (i === index ? value : opt)) : value,
+//     }));
+//   };
 
 //   return (
-//     <MathJaxContext
-//       config={{
-//         tex: { inlineMath: [["$", "$"], ["\\(", "\\)"]] },
-//         options: { skipHtmlTags: ["script", "noscript", "style", "textarea", "pre", "code"] },
-//       }}
-//     >
-//       <div
-//         ref={containerRef}
-//         contentEditable
-//         suppressContentEditableWarning
-//         style={{
-//           display: "inline-flex",
-//           alignItems: "center",
-//           flexWrap: "wrap",
-//           border: "1px solid #ccc",
-//           padding: "8px",
-//           cursor: "text",
-//           minHeight: "30px",
-//         }}
-//         onKeyDown={handleKeyDown}
-//       >
-//         {items.map((item, index) => (
-//           <React.Fragment key={index}>
-//             {item.type === "math" ? (
-//               <span
-//                 style={{ margin: "0 4px", cursor: "pointer", backgroundColor: cursorIndex === index ? "#ddd" : "transparent" }}
-//                 onClick={() => updateCursorPosition(index)}
-//               >
-//                 <MathJax>{`\\(${item.value}\\)`}</MathJax>
-//               </span>
-//             ) : (
-//               <span
-//                 style={{ margin: "0 4px", cursor: "text", backgroundColor: cursorIndex === index ? "#ddd" : "transparent" }}
-//                 onClick={() => updateCursorPosition(index)}
-//               >
-//                 {item.value}
-//               </span>
-//             )}
-//           </React.Fragment>
+//     <div className="p-4 w-full h-screen flex flex-col space-y-4">
+//       <h2 className="text-lg font-semibold">Create Question</h2>
+//       <InputEditor
+//         value={content.question}
+//         onChange={(value) => handleChange("question", -1, value)}
+//         isActive={activeField === "question"}
+//         onFocus={() => setActiveField("question")}
+//         className="w-full flex-grow"
+//       />
+//       <div className="flex flex-col gap-4 flex-grow">
+//         {content.options.map((option, index) => (
+//           <InputEditor
+//             key={index}
+//             value={option}
+//             onChange={(value) => handleChange("options", index, value)}
+//             isActive={activeField === `option-${index}`}
+//             onFocus={() => setActiveField(`option-${index}`)}
+//             className="w-full flex-grow"
+//           />
 //         ))}
 //       </div>
-//     </MathJaxContext>
+//     </div>
 //   );
 // };
 
 // export default QuestionForm;
 
-import React, { useState, useEffect, useRef, useCallback } from "react";
-import { MathJax, MathJaxContext } from "better-react-mathjax";
+import React, { useState } from "react";
+import dynamic from "next/dynamic";
+import InputEditor from "../InputEditor/InputEditor";
 
 interface MathJaxItem {
   type: "math" | "text";
   value: string;
 }
 
+const MathJax = dynamic(() => import("better-react-mathjax").then((mod) => mod.MathJax), { ssr: false });
+
 const QuestionForm: React.FC = () => {
-  const [items, setItems] = useState<MathJaxItem[]>([
-    { type: 'text', value: 'paven' },
-    { type: 'text', value: 'hello' },
-    { type: 'math', value: '\\int x^2 dx' },
-    { type: 'text', value: 'test' },
-    { type: 'math', value: '\\iint f(x, y) dxdy' },
-    { type: 'text', value: 'sample' },
-    { type: 'math', value: '\\int_0^1 e^x dx' },
-    { type: 'text', value: 'world' },
-    { type: 'math', value: '\\iint_0^1 xy dxdy' },
-    { type: 'text', value: 'example' }
+  const [activeField, setActiveField] = useState<string | null>(null);
+
+  const [question, setQuestion] = useState<MathJaxItem[]>([
+    { type: "text", value: "paven" },
+    { type: "text", value: "hello" },
+    { type: "math", value: "\\int x^2 dx" },
   ]);
-  
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [cursorIndex, setCursorIndex] = useState<number>(0);
 
-  const updateCursorPosition = useCallback((index: number) => {
-    setCursorIndex(index);
-  }, []);
+  const [option1, setOption1] = useState<MathJaxItem[]>([
+    { type: "text", value: "test" },
+    { type: "math", value: "\\iint f(x, y) dxdy" },
+  ]);
 
-  const handleKeyDown = useCallback(
-    (event: React.KeyboardEvent<HTMLDivElement>) => {
-      if (!containerRef.current) return;
+  const [option2, setOption2] = useState<MathJaxItem[]>([
+    { type: "text", value: "sample" },
+    { type: "math", value: "\\int_0^1 e^x dx" },
+  ]);
 
-      if (event.key === "ArrowLeft") {
-        event.preventDefault();
-        if (cursorIndex > 0) {
-          updateCursorPosition(cursorIndex - 1);
-        }
-      }
+  const [option3, setOption3] = useState<MathJaxItem[]>([
+    { type: "text", value: "world" },
+    { type: "math", value: "\\iint_0^1 xy dxdy" },
+  ]);
 
-      if (event.key === "ArrowRight") {
-        event.preventDefault();
-        if (cursorIndex < items.length - 1) {
-          updateCursorPosition(cursorIndex + 1);
-        }
-      }
+  const [option4, setOption4] = useState<MathJaxItem[]>([
+    { type: "text", value: "example" },
+  ]);
 
-      if (event.key === "Backspace") {
-        event.preventDefault();
-        if (items.length === 0) return; // No items to delete
+  const handleQuestionChange = (value: MathJaxItem[]) => {
+    setQuestion(value);
+  };
 
-        const newItems = [...items];
-        const currentItem = newItems[cursorIndex];
-
-        if (currentItem.type === "math") {
-          newItems.splice(cursorIndex, 1);
-          updateCursorPosition(Math.max(0, cursorIndex - 1));
-        } else if (currentItem.type === "text" && currentItem.value.length > 1) {
-          newItems[cursorIndex] = { type: "text", value: currentItem.value.slice(0, -1) };
-        } else {
-          newItems.splice(cursorIndex, 1);
-          updateCursorPosition(Math.max(0, cursorIndex - 1));
-        }
-
-        // If the last item is removed, ensure the state updates properly
-        if (newItems.length === 0) {
-          setItems([{ type: "text", value: "" }]); // Add an empty text item for input
-          updateCursorPosition(0);
-        } else {
-          setItems(newItems);
-        }
-      }
-    },
-    [items, cursorIndex, updateCursorPosition]
-  );
+  const handleOptionChange = (index: number, value: MathJaxItem[]) => {
+    switch (index) {
+      case 0:
+        setOption1(value);
+        break;
+      case 1:
+        setOption2(value);
+        break;
+      case 2:
+        setOption3(value);
+        break;
+      case 3:
+        setOption4(value);
+        break;
+      default:
+        break;
+    }
+  };
 
   return (
-    <MathJaxContext
-      config={{
-        tex: { inlineMath: [["$", "$"], ["\\(", "\\)"]] },
-        options: { skipHtmlTags: ["script", "noscript", "style", "textarea", "pre", "code"] },
-      }}
-    >
-      <div
-        ref={containerRef}
-        contentEditable
-        suppressContentEditableWarning
-        style={{
-          display: "inline-flex",
-          alignItems: "center",
-          flexWrap: "wrap",
-          border: "1px solid #ccc",
-          padding: "8px",
-          cursor: "text",
-          minHeight: "30px",
-        }}
-        onKeyDown={handleKeyDown}
-      >
-        {items.length === 0 ? (
-          <span style={{ color: "#888" }}>Click to type...</span>
-        ) : (
-          items.map((item, index) => (
-            <React.Fragment key={index}>
-              {item.type === "math" ? (
-                <span
-                  style={{ margin: "0 4px", cursor: "pointer", backgroundColor: cursorIndex === index ? "#ddd" : "transparent" }}
-                  onClick={() => updateCursorPosition(index)}
-                >
-                  <MathJax>{`\\(${item.value}\\)`}</MathJax>
-                </span>
-              ) : (
-                <span
-                  style={{ margin: "0 4px", cursor: "text", backgroundColor: cursorIndex === index ? "#ddd" : "transparent" }}
-                  onClick={() => updateCursorPosition(index)}
-                >
-                  {item.value}
-                </span>
-              )}
-            </React.Fragment>
-          ))
-        )}
+    <div className="p-4 w-full h-screen flex flex-col space-y-4">
+      <h2 className="text-lg font-semibold">Create Question</h2>
+      
+      {/* Question Editor */}
+      <InputEditor
+        value={question}
+        onChange={handleQuestionChange}
+        isActive={activeField === "question"}
+        onFocus={() => setActiveField("question")}
+        className="w-full flex-grow"
+      />
+
+      {/* Options Editors */}
+      <div className="flex flex-col gap-4 flex-grow">
+        {[option1, option2, option3, option4].map((option, index) => (
+          <InputEditor
+            key={index}
+            value={option}
+            onChange={(value) => handleOptionChange(index, value)}
+            isActive={activeField === `option-${index}`}
+            onFocus={() => setActiveField(`option-${index}`)}
+            className="w-full flex-grow"
+          />
+        ))}
       </div>
-    </MathJaxContext>
+    </div>
   );
 };
 
 export default QuestionForm;
+
+
 
