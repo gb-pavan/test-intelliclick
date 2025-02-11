@@ -359,14 +359,169 @@
 
 // export default QuestionForm;
 
+// import { useState, useRef } from "react";
+// import CalculatorTabs from "../Calculator/CalculatorTabs";
+// import { MathJax, MathJaxContext } from "better-react-mathjax";
+// import { Dialog, DialogContent, DialogTitle } from "@mui/material";
+
+// const MathRenderer = ({ expression}: { expression: string; }) => {
+//   return (
+//     <div
+     
+//       className="border px-3 py-2 rounded cursor-pointer hover:bg-gray-100 min-h-[40px] flex items-center"
+//     >
+//       <MathJaxContext>
+//         <MathJax>{`\\(${expression}\\)`}</MathJax>
+//       </MathJaxContext>
+//     </div>
+//   );
+// };
+
+// const QuestionForm = () => {
+//   const [showCalculator, setShowCalculator] = useState(false);
+//   const [content, setContent] = useState("");
+//   const editorRef = useRef<HTMLDivElement>(null);
+//   const selectionRef = useRef<Range | null>(null);
+//     const [open, setOpen] = useState(false);
+
+
+//   // Save cursor position
+//   const saveSelection = () => {
+//     const selection = window.getSelection();
+//     if (selection && selection.rangeCount > 0) {
+//       selectionRef.current = selection.getRangeAt(0);
+//     }
+//   };
+
+//   // Restore cursor position
+//   const restoreSelection = () => {
+//     const selection = window.getSelection();
+//     if (selection && selectionRef.current) {
+//       selection.removeAllRanges();
+//       selection.addRange(selectionRef.current);
+//     }
+//   };
+
+//   // Insert plain text at cursor position
+//   const insertElement = (text: string) => {
+//     if (!editorRef.current) return;
+//     restoreSelection();
+
+//     const selection = window.getSelection();
+//     if (!selection || selection.rangeCount === 0) return;
+
+//     const range = selection.getRangeAt(0);
+//     range.deleteContents();
+//     const textNode = document.createTextNode(text);
+//     range.insertNode(textNode);
+    
+//     range.setStartAfter(textNode);
+//     range.setEndAfter(textNode);
+//     selection.removeAllRanges();
+//     selection.addRange(range);
+
+//     setContent(editorRef.current.innerText);
+//     editorRef.current.focus();
+//   };
+
+//   const handleCalculatorInput = (value: string) => {
+//     insertElement(value);
+//   };
+
+//   const handleInput = (e: React.FormEvent<HTMLDivElement>) => {
+//     setContent(e.currentTarget.innerText);
+//   };
+
+//   const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+//     if (e.key === "Enter") {
+//       e.preventDefault(); // Prevent new lines
+//     }
+//   };
+
+//   const openModal = () => {
+//     setOpen(true);
+//   };
+
+//   return (
+//     <div className="w-full p-4 bg-white shadow-lg rounded-lg mt-10">
+//       <div className="flex justify-center mt-4">
+//         <button
+//           onClick={() => setShowCalculator(!showCalculator)}
+//           className="bg-green-500 text-white p-2 rounded hover:bg-green-600 w-fit mx-auto"
+//         >
+//           {showCalculator ? "Hide Calculator" : "Show Calculator"}
+//         </button>
+//       </div>
+//       {showCalculator && (
+//         <div className="mt-4 p-4 border rounded shadow">
+//           <CalculatorTabs handleCalculatorInput={handleCalculatorInput} insertElement={insertElement} restoreSelection={restoreSelection} />
+//         </div>
+//       )}
+//       <h2 className="text-xl font-semibold mb-4">Create a Question</h2>
+//       <Dialog open={open} onClose={() => setOpen(false)}>
+//         <DialogTitle>Enter Integral Details</DialogTitle>
+//         <DialogContent>
+//           <div className="flex flex-col gap-3">
+//             <label>Lower Limit (x):</label>
+            
+//             <button  className="bg-blue-500 text-white px-4 py-2 rounded mt-2 hover:bg-blue-600">
+//               Submit
+//             </button>
+//           </div>
+//         </DialogContent>
+//       </Dialog>
+//       <div
+//         ref={editorRef}
+//         contentEditable
+//         suppressContentEditableWarning
+//         onInput={handleInput}
+//         onKeyDown={handleKeyDown}
+//         onMouseUp={saveSelection}
+//         onKeyUp={saveSelection}
+//         style={{
+//           border: "1px solid black",
+//           minHeight: "50px",
+//           padding: "10px",
+//           cursor: "text",
+//           whiteSpace: "nowrap",
+//           overflow: "hidden",
+//           textOverflow: "ellipsis",
+//         }}
+//         onFocus={(e) => {
+//           if (e.currentTarget.innerText === "") {
+//             e.currentTarget.innerHTML = "<br>"; // Keeps cursor visible in empty div
+//           }
+//         }}
+//       >
+//         <MathRenderer expression={'\iint'}  />
+//       </div>
+//       <br />
+//     </div>
+//   );
+// };
+
+// export default QuestionForm;
+
 import { useState, useRef } from "react";
 import CalculatorTabs from "../Calculator/CalculatorTabs";
+import { MathJax, MathJaxContext } from "better-react-mathjax";
+import { Dialog, DialogContent, DialogTitle } from "@mui/material";
+
+const MathRenderer = ({ expression }: { expression: string }) => {
+  return (
+    <MathJaxContext>
+      <MathJax>{`\\(${expression}\\)`}</MathJax>
+    </MathJaxContext>
+  );
+};
 
 const QuestionForm = () => {
   const [showCalculator, setShowCalculator] = useState(false);
-  const [content, setContent] = useState("");
+  const [content, setContent] = useState<string>("");
+
   const editorRef = useRef<HTMLDivElement>(null);
   const selectionRef = useRef<Range | null>(null);
+  const [open, setOpen] = useState(false);
 
   // Save cursor position
   const saveSelection = () => {
@@ -385,8 +540,8 @@ const QuestionForm = () => {
     }
   };
 
-  // Insert plain text at cursor position
-  const insertElement = (text: string) => {
+  // Insert MathJax-supported expression inside contentEditable
+  const insertMathExpression = (latex: string) => {
     if (!editorRef.current) return;
     restoreSelection();
 
@@ -395,24 +550,28 @@ const QuestionForm = () => {
 
     const range = selection.getRangeAt(0);
     range.deleteContents();
-    const textNode = document.createTextNode(text);
-    range.insertNode(textNode);
-    
-    range.setStartAfter(textNode);
-    range.setEndAfter(textNode);
+
+    // Create a MathJax inline container
+    const span = document.createElement("span");
+    span.innerHTML = `\\(${latex}\\)`;
+    span.className = "math-expression"; // Optional: You can add a class for styling
+    range.insertNode(span);
+
+    range.setStartAfter(span);
+    range.setEndAfter(span);
     selection.removeAllRanges();
     selection.addRange(range);
 
-    setContent(editorRef.current.innerText);
+    setContent(editorRef.current.innerHTML); // Store the HTML content
     editorRef.current.focus();
   };
 
   const handleCalculatorInput = (value: string) => {
-    insertElement(value);
+    insertMathExpression(value);
   };
 
-  const handleInput = (e: React.FormEvent<HTMLDivElement>) => {
-    setContent(e.currentTarget.innerText);
+  const handleInput = () => {
+    setContent(editorRef.current?.innerHTML || "");
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
@@ -433,39 +592,61 @@ const QuestionForm = () => {
       </div>
       {showCalculator && (
         <div className="mt-4 p-4 border rounded shadow">
-          <CalculatorTabs handleCalculatorInput={handleCalculatorInput} insertElement={insertElement} restoreSelection={restoreSelection} />
+          <CalculatorTabs
+            handleCalculatorInput={handleCalculatorInput}
+            insertElement={insertMathExpression}
+            restoreSelection={restoreSelection}
+          />
         </div>
       )}
       <h2 className="text-xl font-semibold mb-4">Create a Question</h2>
-      <div
-        ref={editorRef}
-        contentEditable
-        suppressContentEditableWarning
-        onInput={handleInput}
-        onKeyDown={handleKeyDown}
-        onMouseUp={saveSelection}
-        onKeyUp={saveSelection}
-        style={{
-          border: "1px solid black",
-          minHeight: "50px",
-          padding: "10px",
-          cursor: "text",
-          whiteSpace: "nowrap",
-          overflow: "hidden",
-          textOverflow: "ellipsis",
-        }}
-        onFocus={(e) => {
-          if (e.currentTarget.innerText === "") {
-            e.currentTarget.innerHTML = "<br>"; // Keeps cursor visible in empty div
-          }
-        }}
-      ></div>
-      <br />
+
+      <Dialog open={open} onClose={() => setOpen(false)}>
+        <DialogTitle>Enter Integral Details</DialogTitle>
+        <DialogContent>
+          <div className="flex flex-col gap-3">
+            <label>Lower Limit (x):</label>
+
+            <button className="bg-blue-500 text-white px-4 py-2 rounded mt-2 hover:bg-blue-600">
+              Submit
+            </button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      <MathJaxContext>
+        <div
+          ref={editorRef}
+          contentEditable
+          suppressContentEditableWarning
+          onInput={handleInput}
+          onKeyDown={handleKeyDown}
+          onMouseUp={saveSelection}
+          onKeyUp={saveSelection}
+          style={{
+            border: "1px solid black",
+            minHeight: "50px",
+            padding: "10px",
+            cursor: "text",
+            whiteSpace: "nowrap",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+          }}
+          onFocus={(e) => {
+            if (e.currentTarget.innerText === "") {
+              e.currentTarget.innerHTML = "<br>"; // Keeps cursor visible in empty div
+            }
+          }}
+        >
+          <MathRenderer expression={"\\iint"} />
+        </div>
+      </MathJaxContext>
     </div>
   );
 };
 
 export default QuestionForm;
+
 
 
 
