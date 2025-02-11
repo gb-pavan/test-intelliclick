@@ -14,8 +14,8 @@ import MathSubsets from './MathSubsets';
 const math = create(all);
 
 interface CalculatorTabsProps {
-  handleCalculatorInput: (value: string) => void;
-  insertElement: (html: string) => void;
+  // handleCalculatorInput: (value: string) => void;
+  // insertElement: (html: string) => void;
   restoreSelection:() =>void;
 }
 

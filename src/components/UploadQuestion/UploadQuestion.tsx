@@ -582,10 +582,84 @@
 
 // export default QuestionForm;
 
+// import React, { useRef, useState } from "react";
+
+// const QuestionForm = () => {
+//   const editorRef = useRef<HTMLDivElement>(null);
+//   const [content, setContent] = useState("");
+//   let selection: Range | null = null;
+
+//   const saveSelection = () => {
+//     const selectionObj = window.getSelection();
+//     if (selectionObj && selectionObj.rangeCount > 0) {
+//       selection = selectionObj.getRangeAt(0);
+//     }
+//   };
+
+//   const restoreSelection = () => {
+//     if (selection) {
+//       const selectionObj = window.getSelection();
+//       selectionObj?.removeAllRanges();
+//       selectionObj?.addRange(selection);
+//     }
+//   };
+
+//   const handleInput = (e: React.FormEvent<HTMLDivElement>) => {
+//     setContent(e.currentTarget.innerText);
+//   };
+
+//   const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+//     if (e.key === "Enter") {
+//       e.preventDefault();
+//       const br = document.createElement("br");
+//       const range = window.getSelection()?.getRangeAt(0);
+//       if (range) {
+//         range.deleteContents();
+//         range.insertNode(br);
+//         range.setStartAfter(br);
+//         range.setEndAfter(br);
+//         const selection = window.getSelection();
+//         selection?.removeAllRanges();
+//         selection?.addRange(range);
+//       }
+//     }
+//   };
+
+//   return (
+//     <div
+//       ref={editorRef}
+//       contentEditable
+//       suppressContentEditableWarning
+//       onInput={handleInput}
+//       onKeyDown={handleKeyDown}
+//       onMouseUp={saveSelection}
+//       onKeyUp={saveSelection}
+//       style={{
+//         border: "1px solid black",
+//         minHeight: "50px",
+//         padding: "10px",
+//         cursor: "text",
+//         whiteSpace: "nowrap",
+//         overflow: "hidden",
+//         textOverflow: "ellipsis",
+//       }}
+//       onFocus={(e) => {
+//         if (e.currentTarget.innerText === "") {
+//           e.currentTarget.innerHTML = "<br>";
+//         }
+//       }}
+//     ></div>
+//   );
+// };
+
+// export default QuestionForm;
+
 import React, { useRef, useState } from "react";
+import CalculatorTabs from "../Calculator/CalculatorTabs";
 
 const QuestionForm = () => {
   const editorRef = useRef<HTMLDivElement>(null);
+  const [showCalculator, setShowCalculator] = useState(false);
   const [content, setContent] = useState("");
   let selection: Range | null = null;
 
@@ -626,30 +700,27 @@ const QuestionForm = () => {
   };
 
   return (
-    <div
-      ref={editorRef}
-      contentEditable
-      suppressContentEditableWarning
-      onInput={handleInput}
-      onKeyDown={handleKeyDown}
-      onMouseUp={saveSelection}
-      onKeyUp={saveSelection}
-      style={{
-        border: "1px solid black",
-        minHeight: "50px",
-        padding: "10px",
-        cursor: "text",
-        whiteSpace: "nowrap",
-        overflow: "hidden",
-        textOverflow: "ellipsis",
-      }}
-      onFocus={(e) => {
-        if (e.currentTarget.innerText === "") {
-          e.currentTarget.innerHTML = "<br>";
-        }
-      }}
-    ></div>
-  );
+  <div className="w-full p-4 bg-white shadow-lg rounded-lg mt-10">
+  {/* Button on top */}
+  <button
+    onClick={() => setShowCalculator(!showCalculator)}
+    className="bg-green-500 text-white p-2 rounded hover:bg-green-600 w-fit mx-auto block"
+  >
+    {showCalculator ? "Hide Calculator" : "Show Calculator"}
+  </button>
+
+  {/* Calculator appears below the button when shown */}
+  {showCalculator && (
+    <div className="mt-4 p-4 border rounded shadow">
+      <CalculatorTabs       
+        restoreSelection={restoreSelection}
+      />
+    </div>
+  )}
+</div>
+
+);
+
 };
 
 export default QuestionForm;
