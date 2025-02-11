@@ -233,6 +233,132 @@
 
 // export default QuestionForm;
 
+// import { useState, useRef } from "react";
+// import CalculatorTabs from "../Calculator/CalculatorTabs";
+
+// const QuestionForm = () => {
+//   const [showCalculator, setShowCalculator] = useState(false);
+//   const [content, setContent] = useState("");
+//   const editorRef = useRef<HTMLDivElement>(null);
+//   const selectionRef = useRef<Range | null>(null);
+
+//   // Save cursor position
+//   const saveSelection = () => {
+//     const selection = window.getSelection();
+//     if (selection && selection.rangeCount > 0) {
+//       selectionRef.current = selection.getRangeAt(0);
+//     }
+//   };
+
+//   // Restore cursor position
+//   const restoreSelection = () => {
+//     const selection = window.getSelection();
+//     if (selection && selectionRef.current) {
+//       selection.removeAllRanges();
+//       selection.addRange(selectionRef.current);
+//     }
+//   };
+
+//   const insertElement = (html: string) => {
+//     if (!editorRef.current) return;
+
+//     restoreSelection(); //
+//   const selection = window.getSelection();
+//   if (!selection || selection.rangeCount === 0) return;
+
+//   const range = selection.getRangeAt(0);
+//   const tempDiv = document.createElement("div");
+//   tempDiv.innerHTML = html;
+
+//   const fragment = document.createDocumentFragment();
+//   let lastNode: Node | null = null;
+
+//   while (tempDiv.firstChild) {
+//     lastNode = fragment.appendChild(tempDiv.firstChild);
+//   }
+
+//   range.deleteContents();
+//   range.insertNode(fragment);
+
+//   // Ensure cursor appears after inserted content
+//   if (lastNode) {
+//     range.setStartAfter(lastNode);
+//     range.setEndAfter(lastNode);
+//     selection.removeAllRanges();
+//     selection.addRange(range);
+//   }
+
+//   // Update state to reflect new content
+//   setContent(editorRef.current?.innerHTML || "");
+  
+//   // Focus back on the editor to keep the cursor active
+//   if (editorRef.current) {
+//     editorRef.current.focus();
+//   }
+// };
+
+
+//   const handleCalculatorInput = (value: string) => {
+//     console.log("calciInput");
+//   };
+
+//   const handleInput = (e: React.FormEvent<HTMLDivElement>) => {
+//     setContent(e.currentTarget.innerText);
+//   };
+
+//   const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+//     if (e.key === "Enter") {
+//       e.preventDefault(); // Prevent new lines
+//     }
+//   };
+
+//   return (
+//     <div className="w-full p-4 bg-white shadow-lg rounded-lg mt-10">
+//       <div className="flex justify-center mt-4">
+//         <button
+//           onClick={() => setShowCalculator(!showCalculator)}
+//           className="bg-green-500 text-white p-2 rounded hover:bg-green-600 w-fit mx-auto"
+//         >
+//           {showCalculator ? "Hide Calculator" : "Show Calculator"}
+//         </button>
+//       </div>
+//       {showCalculator && (
+//         <div className="mt-4 p-4 border rounded shadow">
+//           <CalculatorTabs handleCalculatorInput={handleCalculatorInput} insertElement={insertElement} restoreSelection={restoreSelection} />
+//         </div>
+//       )}
+//       <h2 className="text-xl font-semibold mb-4">Create a Question</h2>
+//       <div
+//         ref={editorRef}
+//         contentEditable
+//         suppressContentEditableWarning
+//         onInput={handleInput}
+//         onKeyDown={handleKeyDown}
+//         onMouseUp={saveSelection} // Save cursor position when clicking inside editor
+//         onKeyUp={saveSelection}   // Save cursor when typing
+//         style={{
+//           border: "1px solid black",
+//           minHeight: "50px",
+//           padding: "10px",
+//           cursor: "text",
+//           whiteSpace: "nowrap",
+//           overflow: "hidden",
+//           textOverflow: "ellipsis",
+//         }}
+//         onFocus={(e) => {
+//           if (e.currentTarget.innerText === "") {
+//             e.currentTarget.innerHTML = "<br>"; // Keeps cursor visible in empty div
+//           }
+//         }}
+//       >
+//       </div>
+//       <br />
+//     </div>
+//   );
+// };
+
+// export default QuestionForm;
+
 import { useState, useRef } from "react";
 import CalculatorTabs from "../Calculator/CalculatorTabs";
 
@@ -259,47 +385,30 @@ const QuestionForm = () => {
     }
   };
 
-  const insertElement = (html: string) => {
+  // Insert plain text at cursor position
+  const insertElement = (text: string) => {
     if (!editorRef.current) return;
+    restoreSelection();
 
-    restoreSelection(); //
-  const selection = window.getSelection();
-  if (!selection || selection.rangeCount === 0) return;
+    const selection = window.getSelection();
+    if (!selection || selection.rangeCount === 0) return;
 
-  const range = selection.getRangeAt(0);
-  const tempDiv = document.createElement("div");
-  tempDiv.innerHTML = html;
-
-  const fragment = document.createDocumentFragment();
-  let lastNode: Node | null = null;
-
-  while (tempDiv.firstChild) {
-    lastNode = fragment.appendChild(tempDiv.firstChild);
-  }
-
-  range.deleteContents();
-  range.insertNode(fragment);
-
-  // Ensure cursor appears after inserted content
-  if (lastNode) {
-    range.setStartAfter(lastNode);
-    range.setEndAfter(lastNode);
+    const range = selection.getRangeAt(0);
+    range.deleteContents();
+    const textNode = document.createTextNode(text);
+    range.insertNode(textNode);
+    
+    range.setStartAfter(textNode);
+    range.setEndAfter(textNode);
     selection.removeAllRanges();
     selection.addRange(range);
-  }
 
-  // Update state to reflect new content
-  setContent(editorRef.current?.innerHTML || "");
-  
-  // Focus back on the editor to keep the cursor active
-  if (editorRef.current) {
+    setContent(editorRef.current.innerText);
     editorRef.current.focus();
-  }
-};
-
+  };
 
   const handleCalculatorInput = (value: string) => {
-    console.log("calciInput");
+    insertElement(value);
   };
 
   const handleInput = (e: React.FormEvent<HTMLDivElement>) => {
@@ -334,8 +443,8 @@ const QuestionForm = () => {
         suppressContentEditableWarning
         onInput={handleInput}
         onKeyDown={handleKeyDown}
-        onMouseUp={saveSelection} // Save cursor position when clicking inside editor
-        onKeyUp={saveSelection}   // Save cursor when typing
+        onMouseUp={saveSelection}
+        onKeyUp={saveSelection}
         style={{
           border: "1px solid black",
           minHeight: "50px",
@@ -350,14 +459,14 @@ const QuestionForm = () => {
             e.currentTarget.innerHTML = "<br>"; // Keeps cursor visible in empty div
           }
         }}
-      >
-      </div>
+      ></div>
       <br />
     </div>
   );
 };
 
 export default QuestionForm;
+
 
 
 

@@ -18,9 +18,9 @@ const GreekSymbolsGrid: React.FC<GreekSymbolsGridProps> = ({setSelectedInput,han
   const handleClick = (value: string) => {
     // setInput((prev) => prev + value);
     setSelectedInput((prev) => prev + value);
-    handleCalculatorInput(value);
+    // handleCalculatorInput(value);
     restoreSelection()
-    insertElement(`<span>${value}</span>`);
+    insertElement(value);
   };
   return (
     <div className="bg-white shadow-md rounded-md w-full mx-auto">
