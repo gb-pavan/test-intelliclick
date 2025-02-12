@@ -241,8 +241,6 @@ const QuestionForm: React.FC = () => {
   "chapter": "Linear Equations",
   "isActive": true,
   "marks": 2
-
-
   };
 
   
