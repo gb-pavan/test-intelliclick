@@ -148,22 +148,22 @@ const QuestionForm: React.FC = () => {
   const [question, setQuestion] = useState<MathJaxItem[]>([
     { type: "text", value: "paven" },
     { type: "text", value: "hello" },
-    { type: "math", value: "\\int x^2 dx" },
+    { type: "math", value: "int x^2 dx" },
   ]);
 
   const [option1, setOption1] = useState<MathJaxItem[]>([
     { type: "text", value: "test" },
-    { type: "math", value: "\\iint f(x, y) dxdy" },
+    { type: "math", value: "iint f(x, y) dxdy" },
   ]);
 
   const [option2, setOption2] = useState<MathJaxItem[]>([
     { type: "text", value: "sample" },
-    { type: "math", value: "\\int_0^1 e^x dx" },
+    { type: "math", value: "int_0^1 e^x dx" },
   ]);
 
   const [option3, setOption3] = useState<MathJaxItem[]>([
     { type: "text", value: "world" },
-    { type: "math", value: "\\iint_0^1 xy dxdy" },
+    { type: "math", value: "iint_0^1 xy dxdy" },
   ]);
 
   const [option4, setOption4] = useState<MathJaxItem[]>([
@@ -222,26 +222,29 @@ const QuestionForm: React.FC = () => {
     const option2Created = formatQuestion(option2);
     const option3Created = formatQuestion(option3);
     const option4Created = formatQuestion(option4);
+    console.log(questionCreated);
+    console.log(option1Created);
+    console.log(option2Created);
+    console.log(option3Created);
+    console.log(option4Created);
 
   const questionDetailsPayload:IQuestion = {
-    question:questionCreated,
-    options: [option1Created, option2Created, option3Created, option4Created],
-    
-  "standard": "10",
-  "standardName": "Grade 10",
-  "subject": "MATH101",
+  "standard": "65f1a3b2c0de4a001cbf1234",
+  "standardName": "10th Grade",
+  "subject": "65f1a3b2c0de4a001cbf5678",
   "subjectName": "Mathematics",
-  "topic": "Algebra",
-  "year": 2025,
-  
+  "topic": "65f1a3b2c0de4a001cbf9101",
+  "year": 2024,
+  "question": questionCreated,
+  "options": [option1Created, option2Created, option3Created, option4Created],
   "correctOptionIndexes": [1],
-  "answers": ["2"],
+  "answers": ["3.14"],
   "questionType": "MCQ",
-  "createdBy": "teacher123",
-  "chapter": "Linear Equations",
+  "createdBy": "65f1a3b2c0de4a001cbf2222",
+  "chapter": "65f1a3b2c0de4a001cbf3333",
   "isActive": true,
   "marks": 2
-  };
+}
 
   
    try {

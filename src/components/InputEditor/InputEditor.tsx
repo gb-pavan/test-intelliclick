@@ -627,7 +627,7 @@ const InputEditor: React.FC<InputEditorProps> = ({ value, onChange, isActive, on
               }}
               onClick={() => updateCursorPosition(index)}
             >
-              {item.type === "math" ? <MathJax>{`\\(${item.value}\\)`}</MathJax> : item.value}
+              {item.type === "math" ? <MathJax>{`\\(\\${item.value}\\)`}</MathJax> : item.value}
             </span>
           ))
         )}
