@@ -277,13 +277,16 @@ const QuestionForm: React.FC = () => {
       <h2 className="text-lg font-semibold">Create Question</h2>
       
       {/* Question Editor */}
-      <InputEditor
-        value={question}
-        onChange={handleQuestionChange}
-        isActive={activeField === "question"}
-        onFocus={() => setActiveField("question")}
-        className="w-full flex-grow"
-      />
+      <div className="w-full flex flex-col">
+        <InputEditor
+          value={question}
+          onChange={handleQuestionChange}
+          isActive={activeField === "question"}
+          onFocus={() => setActiveField("question")}
+          className="w-full flex-grow"
+        />
+      </div>
+      
 
       {/* Options Editors */}
       <div className="flex flex-col gap-4 flex-grow">
