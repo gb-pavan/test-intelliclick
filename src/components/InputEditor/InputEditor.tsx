@@ -371,6 +371,145 @@
 
 // export default QuestionForm;
 
+// interface InputEditorProps {
+//   value: MathJaxItem[];
+//   onChange: (value: MathJaxItem[]) => void;
+//   isActive: boolean;
+//   onFocus: () => void;
+//   className?: string;
+// }
+
+// import React, { useState, useRef, useCallback } from "react";
+// import { MathJax, MathJaxContext } from "better-react-mathjax";
+
+// interface MathJaxItem {
+//   type: "math" | "text";
+//   value: string;
+// }
+
+// const InputEditor: React.FC<InputEditorProps> = ({ value, onChange, isActive, onFocus, className }) => {
+//   // const [items, setItems] = useState<MathJaxItem[]>([
+//   //   { type: "text", value: "" } // Start with an empty text item
+//   // ]);
+//   const [items, setItems] = useState<MathJaxItem[]>([...value]);
+//   const [cursorIndex, setCursorIndex] = useState(0);
+//   const containerRef = useRef<HTMLDivElement>(null);
+
+//   const updateCursorPosition = (index: number) => {
+//     setCursorIndex(index);
+//   };
+//   console.log("items",items);
+
+//   const handleKeyDown = useCallback(
+//     (event: React.KeyboardEvent<HTMLDivElement>) => {
+//       if (!containerRef.current) return;
+
+//       if (event.key === "ArrowLeft") {
+//         event.preventDefault();
+//         if (cursorIndex > 0) updateCursorPosition(cursorIndex - 1);
+//       }
+
+//       if (event.key === "ArrowRight") {
+//         event.preventDefault();
+//         if (cursorIndex < items.length - 1) updateCursorPosition(cursorIndex + 1);
+//       }
+
+//       if (event.key === "Backspace") {
+//         event.preventDefault();
+//         if (items.length === 0) return;
+
+//         const newItems = [...items];
+//         if (newItems[cursorIndex].type === "text" && newItems[cursorIndex].value.length > 0) {
+//           newItems[cursorIndex].value = newItems[cursorIndex].value.slice(0, -1);
+//         } else if (cursorIndex > 0) {
+//           newItems.splice(cursorIndex, 1);
+//           updateCursorPosition(cursorIndex - 1);
+//         }
+
+//         if (newItems.length === 0) {
+//           setItems([{ type: "text", value: "" }]);
+//           updateCursorPosition(0);
+//         } else {
+//           setItems(newItems);
+//         }
+//       }
+//     },
+//     [items, cursorIndex]
+//   );
+
+//   const handleBeforeInput = (event: React.FormEvent<HTMLDivElement>) => {
+//     event.preventDefault();
+//     const text = (event as unknown as InputEvent).data;
+
+//     if (!text) return;
+//     const newItems = [...items];
+
+//     if (newItems[cursorIndex]?.type === "text") {
+//       newItems[cursorIndex].value += text;
+//     } else {
+//       newItems.splice(cursorIndex + 1, 0, { type: "text", value: text });
+//       updateCursorPosition(cursorIndex + 1);
+//     }
+
+//     setItems(newItems);
+//   };
+
+//   return (
+//     <MathJaxContext
+//       config={{
+//         tex: { inlineMath: [["$", "$"], ["\\(", "\\)"]] },
+//         options: { skipHtmlTags: ["script", "noscript", "style", "textarea", "pre", "code"] }
+//       }}
+//     >
+//       <div
+//         ref={containerRef}
+//         contentEditable
+//         suppressContentEditableWarning
+//         onClick={() => onFocus()}
+//         style={{
+//           display: "inline-flex",
+//           alignItems: "center",
+//           flexWrap: "wrap",
+//           border: "1px solid #ccc",
+//           padding: "8px",
+//           cursor: "text",
+//           minHeight: "30px"
+//         }}
+//         onKeyDown={handleKeyDown}
+//         onBeforeInput={handleBeforeInput} // Capture user input
+//       >
+//         {items.length === 0 ? (
+//           <span style={{ color: "#888" }}>Click to type...</span>
+//         ) : (
+//           items.map((item, index) => (
+//             <span
+//               key={index}
+//               style={{
+//                 margin: "0 4px",
+//                 cursor: "text",
+//                 backgroundColor: cursorIndex === index ? "#ddd" : "transparent"
+//               }}
+//               onClick={() => updateCursorPosition(index)}
+//             >
+//               {item.type === "math" ? <MathJax>{`\\(${item.value}\\)`}</MathJax> : item.value}
+//             </span>
+//           ))
+//         )}
+//       </div>
+//     </MathJaxContext>
+//   );
+// };
+
+// export default InputEditor;
+
+import React, { useState, useRef, useCallback, useEffect } from "react";
+import { MathJax, MathJaxContext } from "better-react-mathjax";
+
+interface MathJaxItem {
+  type: "math" | "text";
+  value: string;
+}
+
 interface InputEditorProps {
   value: MathJaxItem[];
   onChange: (value: MathJaxItem[]) => void;
@@ -379,26 +518,19 @@ interface InputEditorProps {
   className?: string;
 }
 
-import React, { useState, useRef, useCallback } from "react";
-import { MathJax, MathJaxContext } from "better-react-mathjax";
-
-interface MathJaxItem {
-  type: "math" | "text";
-  value: string;
-}
-
 const InputEditor: React.FC<InputEditorProps> = ({ value, onChange, isActive, onFocus, className }) => {
-  // const [items, setItems] = useState<MathJaxItem[]>([
-  //   { type: "text", value: "" } // Start with an empty text item
-  // ]);
-  const [items, setItems] = useState<MathJaxItem[]>([...value]);
+  const [items, setItems] = useState<MathJaxItem[]>(value);
   const [cursorIndex, setCursorIndex] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  // Sync local state `items` with `value` whenever `value` changes externally
+  useEffect(() => {
+    setItems(value);
+  }, [value]);
 
   const updateCursorPosition = (index: number) => {
     setCursorIndex(index);
   };
-  console.log("items",items);
 
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent<HTMLDivElement>) => {
@@ -432,9 +564,12 @@ const InputEditor: React.FC<InputEditorProps> = ({ value, onChange, isActive, on
         } else {
           setItems(newItems);
         }
+
+        // Propagate change to parent
+        onChange(newItems);
       }
     },
-    [items, cursorIndex]
+    [items, cursorIndex, onChange]
   );
 
   const handleBeforeInput = (event: React.FormEvent<HTMLDivElement>) => {
@@ -452,6 +587,7 @@ const InputEditor: React.FC<InputEditorProps> = ({ value, onChange, isActive, on
     }
 
     setItems(newItems);
+    onChange(newItems); // Ensure parent state updates
   };
 
   return (
