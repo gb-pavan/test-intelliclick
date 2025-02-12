@@ -8,10 +8,11 @@ export const callApi = async (url: string, method: API, data?: object | null, sh
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
   console.log("baseUrl",baseUrl);
   const uri = `${baseUrl}/api${url}`;
+  console.log("uri",uri);
   const DEFAULT_HEADER = {
     headers: {
       'Content-Type': 'application/json',
-      "Authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzNmM2MyMTYwMjgzMmQ1ZDU5NmM4NmEiLCJyb2xlIjoiQkRBIiwibW9kZXJhdG9yIjpmYWxzZSwiZW1haWwiOiJ0ZXN0LnN0dWRlbnRAZ21haWwuY29tIiwibmFtZSI6IlRlc3QgQkRBIiwiaWF0IjoxNzMzNDg0NjI1fQ.NgHWWfiZNjAImFvFsJhlTW4vI5wDF7Vqi5yvVMdXaXQ",
+      "Authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzNmM2MyMTYwMjgzMmQ1ZDU5NmM4NmEiLCJyb2xlIjoiQkRBIiwibW9kZXJhdG9yIjpmYWxzZSwiZW1haWwiOiJ0ZXN0LnN0dWRlbnRAZ21haWwuY29tIiwibmFtZSI6IlRlc3QgQkRBIiwiaWF0IjoxNzM5MzQxMzE2fQ.UTEa_sSlclYnQWo4lB3-JjRJg1XrV5BhWwCLQfkZ59g",
     },
   };
   try {

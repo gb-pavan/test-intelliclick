@@ -126,6 +126,12 @@ import React, { useState } from "react";
 import dynamic from "next/dynamic";
 import InputEditor from "../InputEditor/InputEditor";
 import CalculatorTabs from "../Calculator/CalculatorTabs";
+import { QuestionSubmitServiceInstance } from '@/services/questionSubmit.service';
+import { AxiosError } from 'axios';
+import { handleError } from '@/utils/helpers';
+import { IQuestion } from '@/interfaces';
+
+
 
 interface MathJaxItem {
   type: "math" | "text";
@@ -163,6 +169,10 @@ const QuestionForm: React.FC = () => {
   const [option4, setOption4] = useState<MathJaxItem[]>([
     { type: "text", value: "example" },
   ]);
+
+  const formatQuestion = (question: MathJaxItem[]): string => {
+  return question.map((item) => item.value).join(" ");
+};
 
   const handleCalculatorInput = (item:MathJaxItem) => {
     switch (activeField) {
@@ -205,6 +215,44 @@ const QuestionForm: React.FC = () => {
         break;
     }
   };
+
+  const handleSubmit = async () => {
+    const questionCreated = formatQuestion(question);
+    const option1Created = formatQuestion(option1);
+    const option2Created = formatQuestion(option2);
+    const option3Created = formatQuestion(option3);
+    const option4Created = formatQuestion(option4);
+
+  const questionDetailsPayload:IQuestion = {
+    question:questionCreated,
+    options: [option1Created, option2Created, option3Created, option4Created],
+    
+  "standard": "10",
+  "standardName": "Grade 10",
+  "subject": "MATH101",
+  "subjectName": "Mathematics",
+  "topic": "Algebra",
+  "year": 2025,
+  
+  "correctOptionIndexes": [1],
+  "answers": ["2"],
+  "questionType": "MCQ",
+  "createdBy": "teacher123",
+  "chapter": "Linear Equations",
+  "isActive": true,
+  "marks": 2
+
+
+  };
+
+  
+   try {
+      const data = await QuestionSubmitServiceInstance.submitQuestion(questionDetailsPayload);
+    } catch (error) {
+      handleError(error as AxiosError,true);
+    }
+};
+
 
   console.log("active",activeField);
   console.log("ques",question);
@@ -249,6 +297,18 @@ const QuestionForm: React.FC = () => {
           />
         ))}
       </div>
+
+      <div className="p-4 w-full h-screen flex flex-col space-y-4">
+    {/* Submit Button */}
+    <div className="flex justify-center mt-4">
+      <button
+        onClick={handleSubmit}
+        className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
+      >
+        Submit Question
+      </button>
+    </div>
+  </div>
     </div>
   );
 };
